@@ -1,5 +1,5 @@
 
-name: Build Novel Tracker APK
+name: Build Novel Tracker Signed APK
 
 on:
   workflow_dispatch:
@@ -10,6 +10,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      KEYSTORE_FILE: ${{ runner.temp }}/novel_tracker_release.jks
 
     steps:
       - name: Checkout repository
@@ -26,11 +33,19 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build APK
-        run: gradle assembleDebug
+      - name: Decode signing key
+        run: |
+          echo "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE_FILE"
 
-      - name: Upload APK
+      - name: Build signed APK
+        run: gradle assembleRelease
+
+      - name: Rename APK
+        run: |
+          cp app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/Novel-Tracker.apk
+
+      - name: Upload signed APK
         uses: actions/upload-artifact@v4
         with:
-          name: Novel-Tracker-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Novel-Tracker-signed-apk
+          path: app/build/outputs/apk/release/Novel-Tracker.apk
