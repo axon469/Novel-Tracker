@@ -1,66 +1,68 @@
+<div align="center">
+
 # Novel Tracker DB
 
-A minimalistic app for collecting the novels you read and the details that matter.
+**A minimalistic place to collect the novels you read and the details that matter.**
 
-Built as a single self-contained HTML file. It runs in any modern browser as a demo and is designed to be packaged as an Android app using a WebView.
+![Version](https://img.shields.io/badge/version-1.0.2-d4a28a?style=flat-square)
+![Platform](https://img.shields.io/badge/platform-Android-3ddc84?style=flat-square)
+![Storage](https://img.shields.io/badge/data-stored%20on%20device-262629?style=flat-square)
+![Offline](https://img.shields.io/badge/works-offline-262629?style=flat-square)
 
-**Version:** 1.0.0
+</div>
 
-## Features (v1.0.0)
+---
 
-- Floating bottom navigation: Home, Add, Settings
-- Empty Home screen, ready for the novel list
-- Settings
-  - **Theme:** Dark, Light, or System
-  - **Design style:** Dots, Grid, or Plain background
-  - **General:** Week start (Saturday, Sunday, Monday)
-  - **About:** App name and version
-- Preferences saved on the device
-- Mobile-first layout with safe-area support for notches and system bars
-- No external libraries, fonts, or network requests, so it works offline
+## Overview
 
-## Project structure
+Novel Tracker DB is built for readers who want to keep their own notes on the novels they follow: characters, events, locations, and anything else worth remembering. Each novel has its own database, organized into categories you name yourself.
 
-```
-.
-├── index.html    # The entire app: markup, styles, and scripts
-└── README.md
-```
+Everything stays on your device. There is no account, no tracking, and no internet requirement.
 
-## Run the demo
+## Features
 
-Open `index.html` in a browser. For the best preview, use your browser's mobile view.
+| Area | What you can do |
+| --- | --- |
+| **Library** | Add novels with a title and an original title. Each novel shows as a cover card in a two-column grid. |
+| **Categories** | Create categories inside a novel, switch between them from the top bar, and rename them any time. |
+| **Items** | Add items with a title and notes to any category, and search within a category. |
+| **Templates** | Start from the Empty template and build the structure yourself. |
+| **Theme** | Dark, Light, or AMOLED black. |
+| **Design style** | Background of None, Dots (adjustable opacity and size), Star, Grid, or your own photo. |
+| **Navigation** | A compact floating bar with Home, Add, and Settings. |
 
-## Android WebView
+## How it works
 
-The Android project should load the file from its assets folder:
+1. Tap the **plus** button in the navigation bar and fill in the novel's details.
+2. Open the novel. A new novel starts empty, so add your first category.
+3. Open a category and use **Add item** to record what you want to remember.
+4. Use the **plus** in the top bar to create more categories, and the **search** icon to find items.
 
-```
-app/src/main/assets/index.html
-```
+## Settings
 
-```kotlin
-webView.settings.javaScriptEnabled = true
-webView.settings.domStorageEnabled = true   // required to save settings
-webView.loadUrl("file:///android_asset/index.html")
-```
-
-Handle the system back button so sub-screens in Settings close correctly:
-
-```kotlin
-onBackPressedDispatcher.addCallback(this) {
-    if (webView.canGoBack()) webView.goBack() else finish()
-}
-```
-
-For correct spacing under system bars, enable edge-to-edge display in the activity.
+- **Theme:** choose how the app looks.
+- **Design style:** choose and adjust the background.
+- **General:** export and import (coming soon).
+- **About:** app name and version.
 
 ## Roadmap
 
-- Add novels and their details
-- Backup and data
-- Stats and more settings
+- [ ] Export and import
+- [ ] Custom templates
+- [ ] Change cover and edit title from the novel menu
+- [ ] Stats
 
-## License
+## Version history
 
-License to be decided.
+| Version | Notes |
+| --- | --- |
+| **1.0.2** | Novels, categories, and items. New Theme and Design style screens. Smaller navigation bar. |
+| **1.0.0** | First release with navigation, empty home, and basic settings. |
+
+---
+
+<div align="center">
+
+Novel Tracker DB · Version 1.0.2
+
+</div>
