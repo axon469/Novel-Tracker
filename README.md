@@ -4,7 +4,7 @@
 
 **A minimalistic place to collect the novels you read and the details that matter.**
 
-![Version](https://img.shields.io/badge/version-1.0.2-d4a28a?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.0.3-d4a28a?style=flat-square)
 ![Platform](https://img.shields.io/badge/platform-Android-3ddc84?style=flat-square)
 ![Storage](https://img.shields.io/badge/data-stored%20on%20device-262629?style=flat-square)
 ![Offline](https://img.shields.io/badge/works-offline-262629?style=flat-square)
@@ -24,19 +24,20 @@ Everything stays on your device. There is no account, no tracking, and no intern
 | Area | What you can do |
 | --- | --- |
 | **Library** | Add novels with a title and an original title. Each novel shows as a cover card in a two-column grid. |
-| **Categories** | Create categories inside a novel, switch between them from the top bar, and rename them any time. |
-| **Items** | Add items with a title and notes to any category, and search within a category. |
+| **Categories** | Create as many categories as you like and switch between them with scrollable tabs. Tap the active tab to rename it. |
+| **Items** | Open any item on its own page with Title and Synopsis fields that save as you type. Search within a category. |
+| **Novel menu** | A minimal three-dot menu on each novel with Edit, Set cover, Cloud backup, and Delete (coming soon). |
 | **Templates** | Start from the Empty template and build the structure yourself. |
 | **Theme** | Dark, Light, or AMOLED black. |
-| **Design style** | Background of None, Dots (adjustable opacity and size), Star, Grid, or your own photo. |
+| **Design style** | Background of None, Dots, Star, or Grid with adjustable opacity (0 to 100) and size, or your own photo. |
 | **Navigation** | A compact floating bar with Home, Add, and Settings. |
 
 ## How it works
 
 1. Tap the **plus** button in the navigation bar and fill in the novel's details.
 2. Open the novel. A new novel starts empty, so add your first category.
-3. Open a category and use **Add item** to record what you want to remember.
-4. Use the **plus** in the top bar to create more categories, and the **search** icon to find items.
+3. Use **Add item** to record what you want to remember, and tap an item to open it.
+4. Tap the **plus** at the end of the tabs for more categories, and the **search** icon to find items.
 
 ## Settings
 
@@ -49,13 +50,15 @@ Everything stays on your device. There is no account, no tracking, and no intern
 
 - [ ] Export and import
 - [ ] Custom templates
-- [ ] Change cover and edit title from the novel menu
+- [ ] Edit, set cover, delete, and cloud backup from the novel menu
+- [ ] Novel data version selector
 - [ ] Stats
 
 ## Version history
 
 | Version | Notes |
 | --- | --- |
+| **1.0.3** | Scrollable category tabs, full-page items, novel dropdown menu, and sliders for Star and Grid backgrounds. |
 | **1.0.2** | Novels, categories, and items. New Theme and Design style screens. Smaller navigation bar. |
 | **1.0.0** | First release with navigation, empty home, and basic settings. |
 
@@ -63,6 +66,6 @@ Everything stays on your device. There is no account, no tracking, and no intern
 
 <div align="center">
 
-Novel Tracker DB · Version 1.0.2
+Novel Tracker DB · Version 1.0.3
 
 </div>
