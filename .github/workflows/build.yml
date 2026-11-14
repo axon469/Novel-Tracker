@@ -16,7 +16,7 @@ jobs:
       KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
       KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
       KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-      KEYSTORE_FILE: novel_tracker_release.jks
+      KEYSTORE_FILE: ${{ github.workspace }}/novel_tracker_release.jks
 
     steps:
       - name: Checkout repository
