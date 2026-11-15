@@ -84,24 +84,21 @@ Your library and its data are stored locally on your device. No account is requi
 - [ ] Novel data version selector
 - [ ] Additional library and reading statistics
 
-## Version History
+## Version history
 
-| Version | Highlights |
-|---|---|
-| **1.0.5** | Redesigned Design Style page, category colors, reusable templates, novel information, cover management, and ZIP export. |
-| **1.0.4** | Added novel import support, cover selection, novel editing and deletion, brighter Dots, staggered Star backgrounds, and separated item cards. |
-| **1.0.3** | Added scrollable category tabs, full-page item views, novel dropdown menu, and Star and Grid background sliders. |
-| **1.0.2** | Introduced novels, categories, items, Theme and Design Style screens, and a smaller navigation bar. |
-| **1.0.0** | Initial release with basic navigation, an empty home screen, and settings. |
+| Version | Notes |
+| --- | --- |
+| **1.0.7** | Tags, homepage sort and view switch, version selector, zip import with versions, export fixes, About the developer, and a new Design style page. |
+| **1.0.5** | Redesigned Design style page, category colors, templates, novel information, Clear cover, and export to zip. |
+| **1.0.4** | Import from other apps, set cover, edit and delete novels, brighter dots, staggered stars, and separated item cards. |
+| **1.0.3** | Scrollable category tabs, full-page items, novel dropdown menu, and sliders for Star and Grid backgrounds. |
+| **1.0.2** | Novels, categories, and items. New Theme and Design style screens. Smaller navigation bar. |
+| **1.0.0** | First release with navigation, empty home, and basic settings. |
 
 ---
 
 <div align="center">
 
-**Novel Tracker DB**
-
-*Your novels. Your notes. Your personal library.*
-
-Version 1.0.5
+Novel Tracker DB · Version 1.0.7 · Made by Abu Bokker (axon469)
 
 </div>
