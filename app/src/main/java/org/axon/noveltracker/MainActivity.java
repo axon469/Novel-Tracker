@@ -4,9 +4,11 @@ package org.axon.noveltracker;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Build;
+import android.text.Html;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -16,6 +18,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.view.ViewGroup;
 
 import org.json.JSONObject;
 
@@ -75,11 +81,13 @@ public class MainActivity extends Activity {
                 } catch (Exception e) {
                     fileCallback = null;
                     callback.onReceiveValue(null);
+
                     Toast.makeText(
                             MainActivity.this,
                             "Unable to open file picker",
                             Toast.LENGTH_SHORT
                     ).show();
+
                     return false;
                 }
             }
@@ -117,6 +125,10 @@ public class MainActivity extends Activity {
         checkForUpdates();
     }
 
+    // ==========================================
+    // UPDATE CHECKER
+    // ==========================================
+
     private void checkForUpdates() {
 
         new Thread(() -> {
@@ -131,6 +143,7 @@ public class MainActivity extends Activity {
                 connection.setConnectTimeout(10000);
                 connection.setReadTimeout(10000);
                 connection.setUseCaches(false);
+
                 connection.setRequestProperty(
                         "Cache-Control", "no-cache");
 
@@ -139,6 +152,7 @@ public class MainActivity extends Activity {
                 }
 
                 InputStream input = connection.getInputStream();
+
                 BufferedReader reader = new BufferedReader(
                         new InputStreamReader(input));
 
@@ -204,6 +218,74 @@ public class MainActivity extends Activity {
         }).start();
     }
 
+    // ==========================================
+    // POPUP DESIGN
+    // ==========================================
+
+    private int dp(float value) {
+        return (int) (
+                value * getResources()
+                        .getDisplayMetrics().density + 0.5f
+        );
+    }
+
+    private String formatChangelog(String markdown) {
+
+        StringBuilder html = new StringBuilder();
+        String[] lines = markdown.split("\\n");
+
+        for (String line : lines) {
+
+            line = line.trim();
+
+            if (line.isEmpty()) {
+                continue;
+            }
+
+            line = line.replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;");
+
+            line = line.replaceAll(
+                    "\\*\\*(.*?)\\*\\*",
+                    "<b>$1</b>"
+            );
+
+            if (line.startsWith("### ")) {
+
+                html.append("<h4>")
+                        .append(line.substring(4))
+                        .append("</h4>");
+
+            } else if (line.startsWith("## ")) {
+
+                html.append("<h3>")
+                        .append(line.substring(3))
+                        .append("</h3>");
+
+            } else if (line.startsWith("# ")) {
+
+                html.append("<h2>")
+                        .append(line.substring(2))
+                        .append("</h2>");
+
+            } else if (line.startsWith("- ")) {
+
+                html.append("<p>• ")
+                        .append(line.substring(2))
+                        .append("</p>");
+
+            } else {
+
+                html.append("<p>")
+                        .append(line)
+                        .append("</p>");
+            }
+        }
+
+        return html.toString();
+    }
+
     private void showUpdateDialog(
             String version,
             String changelog,
@@ -213,22 +295,111 @@ public class MainActivity extends Activity {
             return;
         }
 
-        new AlertDialog.Builder(this)
-                .setTitle("Update Available")
-                .setMessage(
-                        "Novel Tracker " + version
-                                + " is available.\n\n"
-                                + changelog
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        layout.setPadding(
+                dp(24),
+                dp(20),
+                dp(24),
+                dp(8)
+        );
+
+        // Dialog title
+
+        TextView title = new TextView(this);
+        title.setText("Update Available");
+        title.setTextSize(23);
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextColor(0xFF202124);
+
+        layout.addView(title);
+
+        // Version subtitle
+
+        TextView subtitle = new TextView(this);
+        subtitle.setText(
+                "Novel Tracker " + version + " is ready."
+        );
+
+        subtitle.setTextSize(14);
+        subtitle.setTextColor(0xFF777777);
+
+        subtitle.setPadding(
+                0,
+                dp(7),
+                0,
+                dp(18)
+        );
+
+        layout.addView(subtitle);
+
+        // Scrollable changelog
+
+        ScrollView scrollView = new ScrollView(this);
+        scrollView.setFillViewport(false);
+
+        TextView notes = new TextView(this);
+        notes.setTextSize(15);
+        notes.setTextColor(0xFF303030);
+
+        notes.setLineSpacing(dp(3), 1.0f);
+
+        notes.setPadding(
+                0,
+                0,
+                dp(6),
+                dp(8)
+        );
+
+        String formatted = formatChangelog(changelog);
+
+        if (Build.VERSION.SDK_INT >= 24) {
+
+            notes.setText(Html.fromHtml(
+                    formatted,
+                    Html.FROM_HTML_MODE_LEGACY
+            ));
+
+        } else {
+
+            notes.setText(Html.fromHtml(formatted));
+        }
+
+        scrollView.addView(notes);
+
+        layout.addView(
+                scrollView,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        dp(390)
                 )
+        );
+
+        // Dialog buttons
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(layout)
+
+                .setNegativeButton(
+                        "Later",
+                        null
+                )
+
                 .setPositiveButton(
                         "Update Now",
-                        (dialog, which) -> {
+                        (d, which) -> {
+
                             try {
                                 Intent intent = new Intent(
                                         Intent.ACTION_VIEW,
-                                        Uri.parse(apkUrl));
+                                        Uri.parse(apkUrl)
+                                );
+
                                 startActivity(intent);
+
                             } catch (Exception e) {
+
                                 Toast.makeText(
                                         this,
                                         "Unable to open download link",
@@ -237,10 +408,16 @@ public class MainActivity extends Activity {
                             }
                         }
                 )
-                .setNegativeButton("Update Later", null)
+
                 .setCancelable(true)
-                .show();
+                .create();
+
+        dialog.show();
     }
+
+    // ==========================================
+    // ANDROID BACKUP BRIDGE
+    // ==========================================
 
     private class AndroidBridge {
 
@@ -253,17 +430,22 @@ public class MainActivity extends Activity {
                 }
 
                 pendingSaveData = Base64.decode(
-                        base64Data, Base64.DEFAULT);
+                        base64Data,
+                        Base64.DEFAULT
+                );
 
                 pendingFileName = filename;
 
                 runOnUiThread(() -> {
+
                     try {
                         Intent intent = new Intent(
-                                Intent.ACTION_CREATE_DOCUMENT);
+                                Intent.ACTION_CREATE_DOCUMENT
+                        );
 
                         intent.addCategory(
-                                Intent.CATEGORY_OPENABLE);
+                                Intent.CATEGORY_OPENABLE
+                        );
 
                         intent.setType("application/zip");
 
@@ -271,12 +453,16 @@ public class MainActivity extends Activity {
                                 Intent.EXTRA_TITLE,
                                 pendingFileName != null
                                         ? pendingFileName
-                                        : "NovelTracker-Backup.zip");
+                                        : "NovelTracker-Backup.zip"
+                        );
 
                         startActivityForResult(
-                                intent, REQUEST_SAVE);
+                                intent,
+                                REQUEST_SAVE
+                        );
 
                     } catch (Exception e) {
+
                         Toast.makeText(
                                 MainActivity.this,
                                 "Unable to save backup",
@@ -286,6 +472,7 @@ public class MainActivity extends Activity {
                 });
 
             } catch (Exception e) {
+
                 runOnUiThread(() -> Toast.makeText(
                         MainActivity.this,
                         "Could not prepare backup",
@@ -295,20 +482,30 @@ public class MainActivity extends Activity {
         }
     }
 
+    // ==========================================
+    // FILE IMPORT AND BACKUP EXPORT RESULTS
+    // ==========================================
+
     @Override
     protected void onActivityResult(
             int requestCode,
             int resultCode,
             Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(
+                requestCode,
+                resultCode,
+                data
+        );
 
         if (requestCode == REQUEST_FILE) {
 
             if (fileCallback != null) {
+
                 Uri[] results = null;
 
                 if (resultCode == RESULT_OK && data != null) {
+
                     results = WebChromeClient.FileChooserParams
                             .parseResult(resultCode, data);
                 }
@@ -331,6 +528,7 @@ public class MainActivity extends Activity {
                             .openOutputStream(uri);
 
                     if (output != null) {
+
                         output.write(pendingSaveData);
                         output.flush();
                         output.close();
@@ -343,6 +541,7 @@ public class MainActivity extends Activity {
                     }
 
                 } catch (Exception e) {
+
                     Toast.makeText(
                             this,
                             "Failed to save backup",
@@ -356,11 +555,19 @@ public class MainActivity extends Activity {
         }
     }
 
+    // ==========================================
+    // ANDROID BACK BUTTON
+    // ==========================================
+
     @Override
     public void onBackPressed() {
+
         if (webView != null && webView.canGoBack()) {
+
             webView.goBack();
+
         } else {
+
             super.onBackPressed();
         }
     }
