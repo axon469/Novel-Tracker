@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Novel Tracker DB">
+  <rect width="512" height="512" rx="112" fill="#111113"/>
+  <path d="M182 126h148v262l-74-56-74 56z" fill="#d4a28a" stroke="#d4a28a" stroke-width="24" stroke-linejoin="round"/>
+  <g fill="none" stroke="#111113" stroke-width="14" stroke-linecap="round">
+    <path d="M212 196q44 16 88 0"/>
+    <path d="M212 244q44 16 88 0"/>
+    <path d="M212 292q44 16 88 0"/>
+  </g>
+</svg>
