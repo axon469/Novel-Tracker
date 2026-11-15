@@ -1,76 +1,107 @@
-<div align="center">
+ <div align="center">
+
+<img src="assets/logo.png" alt="Novel Tracker DB Logo" width="120">
 
 # Novel Tracker DB
 
-**A minimalistic place to collect the novels you read and the details that matter.**
+**A personal space to organize the novels you read and keep track of every detail.**
 
-![Version](https://img.shields.io/badge/version-1.0.5-d4a28a?style=flat-square)
-![Platform](https://img.shields.io/badge/platform-Android-3ddc84?style=flat-square)
-![Storage](https://img.shields.io/badge/data-stored%20on%20device-262629?style=flat-square)
-![Offline](https://img.shields.io/badge/works-offline-262629?style=flat-square)
+
+![Version](https://img.shields.io/badge/version-1.2.9-cf9f86?style=for-the-badge)
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![No dependencies](https://img.shields.io/badge/dependencies-none-1b1b1d?style=for-the-badge)
+![Data stays on device](https://img.shields.io/badge/data-stays%20on%20device-1b1b1d?style=for-the-badge)
+[![Download Android APK](https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/axon469/Sakina-Prayer-Tracker/releases)
 
 </div>
 
+## Installation
+
+### Android
+
+1. Open the [GitHub Releases page]((https://github.com/axon469/Novel-Tracker/releases)).
+2. Open the latest release.
+3. Download the APK file.
+4. Install it on your Android device.
+
+Android may ask you to allow installation from your browser or file manager. Only install APKs from a source you trust.
+
+### Demo Website
+
+1. Visit the [Novel Tracker DB website](axon469.github.io/Novel-Tracker/).
+2. Open it in a modern browser.
+3. Start tracking your novel.
+
+
+
 ---
 
-## Overview
+## About
 
-Novel Tracker DB is built for readers who want to keep their own notes on the novels they follow: characters, events, locations, and anything else worth remembering. Each novel has its own database, organized into categories you name yourself.
+Novel Tracker DB is a personal organizer designed for readers who want to keep detailed records of the novels they follow.
 
-Everything stays on your device. There is no account, no tracking, and no internet requirement.
+Create a separate space for each novel and organize your notes into customizable categories. Keep track of characters, events, locations, story details, and anything else you want to remember.
+
+Your library and its data are stored locally on your device. No account is required, and the app is designed to work offline.
 
 ## Features
 
-| Area | What you can do |
-| --- | --- |
-| **Library** | Add novels with a title and an original title. Each novel shows as a cover card in a two-column grid. |
-| **Categories** | Create as many categories as you like and switch between them with scrollable tabs. Tap the active tab to rename it. |
-| **Items** | Open any item on its own page with Title and Synopsis fields that save as you type. Search within a category. |
-| **Novel menu** | A minimal three-dot menu on each novel: Edit title and original title, Set or Clear cover, and Delete. Backup and Backup to Cloud are coming soon. |
-| **Colors** | Pick a color for each category title when you create or rename it. The active tab is shown by a line under it. |
-| **Templates** | Save a novel's structure as a template (categories, with or without items) and pick it when adding a new novel. |
-| **Novel information** | See statistics for a novel: categories, items, characters, largest category, and more. |
-| **Export** | Back up all novels or just the ones you pick, in Novel Tracker DB, `.nov`, or `.txt` format, as a zip. App settings can be included. |
-| **Import** | Import backups (`.nov`) from supported apps. Titles, original titles, covers, categories, and items are brought in, with a summary before you import and live progress with estimated time. |
-| **Templates** | Start from the Empty template and build the structure yourself. |
-| **Theme** | Dark, Light, or AMOLED black. |
-| **Design style** | A live preview with None, Dots, Star, Grid, or your own photo, plus opacity and size sliders. |
-| **Navigation** | A compact floating bar with Home, Add, and Settings. |
+| Feature | Description |
+|---|---|
+| **Novel Library** | Add novels with their titles and original titles. Browse your collection in a clean, two-column cover grid. |
+| **Custom Categories** | Create, rename, and organize categories with scrollable tabs. |
+| **Items & Notes** | Give each item its own page with Title and Synopsis fields that save as you type. |
+| **Novel Management** | Edit novel details, set or clear cover images, and delete novels from the three-dot menu. |
+| **Category Colors** | Customize category title colors to make each novel's organization your own. |
+| **Templates** | Save a novel's category structure as a reusable template, with or without its items. |
+| **Novel Information** | View useful statistics, including categories, items, characters, and the largest category. |
+| **Import & Export** | Import supported `.nov` backups and export selected or all novels in supported formats, packaged as a ZIP archive. |
+| **Themes** | Choose between Dark, Light, and AMOLED Black themes. |
+| **Design Customization** | Personalize the background with None, Dots, Star, Grid, or your own photo. Adjust opacity and size. |
+| **Simple Navigation** | Access Home, Add, and Settings from a compact floating navigation bar. |
 
-## How it works
+## Getting Started
 
-1. Tap the **plus** button in the navigation bar and fill in the novel's details.
-2. Open the novel. A new novel starts empty, so add your first category.
-3. Use **Add item** to record what you want to remember, and tap an item to open it.
-4. Tap the **plus** at the end of the tabs for more categories, and the **search** icon to find items.
+1. **Add a novel:** Tap the plus button in the navigation bar and enter the novel's details.
+2. **Create categories:** Open your novel and add your first category.
+3. **Add items:** Use the Add Item option to record characters, events, locations, or other notes.
+4. **Organize your library:** Add more categories using the plus button at the end of the category tabs.
+5. **Find information:** Use the search icon to find items within a category.
 
 ## Settings
 
-- **Theme:** choose how the app looks.
-- **Design style:** choose and adjust the background.
-- **General:** Export and import. Import backups from other apps, or export your novels as a zip.
-- **About:** app name and version.
+- **Theme:** Switch between Dark, Light, and AMOLED Black.
+- **Design Style:** Customize the app's background and visual appearance.
+- **General:** Import backups and export your novel collection.
+- **About:** View the app name and current version.
 
 ## Roadmap
 
-- [ ] Backup and Backup to Cloud
+- [ ] Improved backup and restore options
+- [ ] Cloud backup support
 - [ ] Novel data version selector
-- [ ] Stats
+- [ ] Additional library and reading statistics
 
-## Version history
+## Version History
 
-| Version | Notes |
-| --- | --- |
-| **1.0.5** | Redesigned Design style page, category colors, templates, novel information, Clear cover, and export to zip. |
-| **1.0.4** | Import from other apps, set cover, edit and delete novels, brighter dots, staggered stars, and separated item cards. |
-| **1.0.3** | Scrollable category tabs, full-page items, novel dropdown menu, and sliders for Star and Grid backgrounds. |
-| **1.0.2** | Novels, categories, and items. New Theme and Design style screens. Smaller navigation bar. |
-| **1.0.0** | First release with navigation, empty home, and basic settings. |
+| Version | Highlights |
+|---|---|
+| **1.0.5** | Redesigned Design Style page, category colors, reusable templates, novel information, cover management, and ZIP export. |
+| **1.0.4** | Added novel import support, cover selection, novel editing and deletion, brighter Dots, staggered Star backgrounds, and separated item cards. |
+| **1.0.3** | Added scrollable category tabs, full-page item views, novel dropdown menu, and Star and Grid background sliders. |
+| **1.0.2** | Introduced novels, categories, items, Theme and Design Style screens, and a smaller navigation bar. |
+| **1.0.0** | Initial release with basic navigation, an empty home screen, and settings. |
 
 ---
 
 <div align="center">
 
-Novel Tracker DB · Version 1.0.5
+**Novel Tracker DB**
+
+*Your novels. Your notes. Your personal library.*
+
+Version 1.0.5
 
 </div>
