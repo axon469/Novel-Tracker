@@ -7,13 +7,13 @@
 **A personal space to organize the novels you read and keep track of every detail.**
 
 
-![Version](https://img.shields.io/badge/version-1.2.9-cf9f86?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.0.5-cf9f86?style=for-the-badge)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 ![No dependencies](https://img.shields.io/badge/dependencies-none-1b1b1d?style=for-the-badge)
 ![Data stays on device](https://img.shields.io/badge/data-stays%20on%20device-1b1b1d?style=for-the-badge)
-[![Download Android APK](https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/axon469/Sakina-Prayer-Tracker/releases)
+[![Download Android APK](https://img.shields.io/badge/Download-Android%20APK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://github.com/axon469/Novel-Tracker/releases)
 
 </div>
 
