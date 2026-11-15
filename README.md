@@ -17,25 +17,6 @@
 
 </div>
 
-## Installation
-
-### Android
-
-1. Open the [GitHub Releases page](https://github.com/axon469/Novel-Tracker/releases).
-2. Open the latest release.
-3. Download the APK file.
-4. Install it on your Android device.
-
-Android may ask you to allow installation from your browser or file manager. Only install APKs from a source you trust.
-
-### Demo Website
-
-1. Visit the [Novel Tracker DB website](axon469.github.io/Novel-Tracker/).
-2. Open it in a modern browser.
-3. Start tracking your novel.
-
-
-
 ---
 
 ## About
@@ -45,6 +26,29 @@ Novel Tracker DB is a personal organizer designed for readers who want to keep d
 Create a separate space for each novel and organize your notes into customizable categories. Keep track of characters, events, locations, story details, and anything else you want to remember.
 
 Your library and its data are stored locally on your device. No account is required, and the app is designed to work offline.
+
+---
+
+## Screenshots
+
+<table align="center">
+  <tr>
+    <td align="center"><img src="screenshots/home.png" width="190" alt="Home"></td>
+    <td align="center"><img src="screenshots/novel.png" width="190" alt="Inside a novel"></td>
+    <td align="center"><img src="screenshots/item.png" width="190" alt="Item page"></td>
+    <td align="center"><img src="screenshots/design.png" width="190" alt="Design style"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Home</b><br>Covers, sort, and view switch</sub></td>
+    <td align="center"><sub><b>Novel</b><br>Colored category tabs and versions</sub></td>
+    <td align="center"><sub><b>Item</b><br>Title and synopsis</sub></td>
+    <td align="center"><sub><b>Design style</b><br>Backgrounds you can tune</sub></td>
+  </tr>
+</table>
+
+<sub>Screenshots use sample data.</sub>
+
+---
 
 ## Features
 
@@ -76,6 +80,24 @@ Your library and its data are stored locally on your device. No account is requi
 - **Design Style:** Customize the app's background and visual appearance.
 - **General:** Import backups and export your novel collection.
 - **About:** View the app name and current version.
+
+
+## Installation
+
+### Android
+
+1. Open the [GitHub Releases page](https://github.com/axon469/Novel-Tracker/releases).
+2. Open the latest release.
+3. Download the APK file.
+4. Install it on your Android device.
+
+Android may ask you to allow installation from your browser or file manager. Only install APKs from a source you trust.
+
+### Demo Website
+
+1. Visit the [Novel Tracker DB website](axon469.github.io/Novel-Tracker/).
+2. Open it in a modern browser.
+3. Start tracking your novel.
 
 ## Roadmap
 
