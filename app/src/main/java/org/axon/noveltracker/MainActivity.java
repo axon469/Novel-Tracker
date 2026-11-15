@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Build;
@@ -22,6 +23,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.view.ViewGroup;
+import android.view.Gravity;
+import android.graphics.Color;
+import android.widget.Button;
 
 import org.json.JSONObject;
 
@@ -45,6 +49,13 @@ public class MainActivity extends Activity {
     private ValueCallback<Uri[]> fileCallback;
     private byte[] pendingSaveData;
     private String pendingFileName;
+
+    private static final int DARK_BG = Color.rgb(23, 25, 28);
+    private static final int DARK_CARD = Color.rgb(30, 33, 37);
+    private static final int TEXT_PRIMARY = Color.rgb(241, 243, 245);
+    private static final int TEXT_SECONDARY = Color.rgb(157, 165, 174);
+    private static final int TEXT_BODY = Color.rgb(205, 210, 216);
+    private static final int ACCENT = Color.rgb(64, 190, 169);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,7 +230,7 @@ public class MainActivity extends Activity {
     }
 
     // ==========================================
-    // POPUP DESIGN
+    // DARK UPDATE POPUP
     // ==========================================
 
     private int dp(float value) {
@@ -229,22 +240,36 @@ public class MainActivity extends Activity {
         );
     }
 
+    private GradientDrawable roundedBackground(
+            int color,
+            float radius) {
+
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(color);
+        drawable.setCornerRadius(dp(radius));
+        return drawable;
+    }
+
+    private String escapeHtml(String text) {
+        return text.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;");
+    }
+
     private String formatChangelog(String markdown) {
 
         StringBuilder html = new StringBuilder();
         String[] lines = markdown.split("\\n");
 
-        for (String line : lines) {
+        for (String originalLine : lines) {
 
-            line = line.trim();
+            String line = originalLine.trim();
 
             if (line.isEmpty()) {
                 continue;
             }
 
-            line = line.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;");
+            line = escapeHtml(line);
 
             line = line.replaceAll(
                     "\\*\\*(.*?)\\*\\*",
@@ -253,37 +278,61 @@ public class MainActivity extends Activity {
 
             if (line.startsWith("### ")) {
 
-                html.append("<h4>")
-                        .append(line.substring(4))
-                        .append("</h4>");
+                html.append(
+                        "<br><font color='#AEB8C2'><b>"
+                ).append(line.substring(4))
+                 .append("</b></font><br>");
 
             } else if (line.startsWith("## ")) {
 
-                html.append("<h3>")
-                        .append(line.substring(3))
-                        .append("</h3>");
+                html.append(
+                        "<br><font color='#40BEA9'><b>"
+                ).append(line.substring(3))
+                 .append("</b></font><br>");
 
             } else if (line.startsWith("# ")) {
 
-                html.append("<h2>")
-                        .append(line.substring(2))
-                        .append("</h2>");
+                html.append(
+                        "<big><font color='#F1F3F5'><b>"
+                ).append(line.substring(2))
+                 .append("</b></font></big><br>");
 
             } else if (line.startsWith("- ")) {
 
-                html.append("<p>• ")
-                        .append(line.substring(2))
-                        .append("</p>");
+                html.append(
+                        "<font color='#40BEA9'>• </font>"
+                ).append("<font color='#CDD2D8'>")
+                 .append(line.substring(2))
+                 .append("</font><br>");
 
             } else {
 
-                html.append("<p>")
-                        .append(line)
-                        .append("</p>");
+                html.append(
+                        "<font color='#AEB6BF'>"
+                ).append(line)
+                 .append("</font><br>");
             }
         }
 
         return html.toString();
+    }
+
+    private TextView createText(
+            String text,
+            float size,
+            int color,
+            boolean bold) {
+
+        TextView view = new TextView(this);
+        view.setText(text);
+        view.setTextSize(size);
+        view.setTextColor(color);
+
+        if (bold) {
+            view.setTypeface(null, Typeface.BOLD);
+        }
+
+        return view;
     }
 
     private void showUpdateDialog(
@@ -291,78 +340,132 @@ public class MainActivity extends Activity {
             String changelog,
             String apkUrl) {
 
-        if (isFinishing()) {
+        if (isFinishing() || isDestroyed()) {
             return;
         }
+
+        // Main popup container
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
         layout.setPadding(
-                dp(24),
-                dp(20),
-                dp(24),
-                dp(8)
+                dp(22),
+                dp(21),
+                dp(22),
+                dp(12)
         );
 
-        // Dialog title
-
-        TextView title = new TextView(this);
-        title.setText("Update Available");
-        title.setTextSize(23);
-        title.setTypeface(null, Typeface.BOLD);
-        title.setTextColor(0xFF202124);
-
-        layout.addView(title);
-
-        // Version subtitle
-
-        TextView subtitle = new TextView(this);
-        subtitle.setText(
-                "Novel Tracker " + version + " is ready."
+        layout.setBackground(
+                roundedBackground(DARK_BG, 20)
         );
 
-        subtitle.setTextSize(14);
-        subtitle.setTextColor(0xFF777777);
+        // Small label
 
-        subtitle.setPadding(
-                0,
-                dp(7),
-                0,
-                dp(18)
+        TextView label = createText(
+                "NOVEL TRACKER  /  UPDATE",
+                10,
+                ACCENT,
+                true
         );
 
-        layout.addView(subtitle);
+        label.setLetterSpacing(0.08f);
+        layout.addView(label);
 
-        // Scrollable changelog
+        // Main title
+
+        TextView title = createText(
+                "Update available",
+                23,
+                TEXT_PRIMARY,
+                true
+        );
+
+        LinearLayout.LayoutParams titleParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+        titleParams.topMargin = dp(7);
+        layout.addView(title, titleParams);
+
+        // Version information
+
+        TextView subtitle = createText(
+                "Version " + version + " is ready to install.",
+                12,
+                TEXT_SECONDARY,
+                false
+        );
+
+        LinearLayout.LayoutParams subtitleParams =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+
+        subtitleParams.topMargin = dp(5);
+        subtitleParams.bottomMargin = dp(17);
+
+        layout.addView(subtitle, subtitleParams);
+
+        // Divider
+
+        ViewGroup divider = new ViewGroup(this) {
+            @Override
+            protected void onMeasure(
+                    int widthMeasureSpec,
+                    int heightMeasureSpec) {
+                setMeasuredDimension(
+                        MeasureSpec.getSize(widthMeasureSpec),
+                        dp(1)
+                );
+            }
+
+            @Override
+            protected void onLayout(
+                    boolean changed,
+                    int l,
+                    int t,
+                    int r,
+                    int b) {
+            }
+        };
+
+        divider.setBackgroundColor(0xFF34383D);
+
+        layout.addView(
+                divider,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        dp(1)
+                )
+        );
+
+        // Scrollable release notes
 
         ScrollView scrollView = new ScrollView(this);
         scrollView.setFillViewport(false);
+        scrollView.setVerticalScrollBarEnabled(false);
+        scrollView.setOverScrollMode(
+                ScrollView.OVER_SCROLL_NEVER
+        );
 
         TextView notes = new TextView(this);
-        notes.setTextSize(15);
-        notes.setTextColor(0xFF303030);
-
-        notes.setLineSpacing(dp(3), 1.0f);
-
-        notes.setPadding(
-                0,
-                0,
-                dp(6),
-                dp(8)
-        );
+        notes.setTextSize(13);
+        notes.setTextColor(TEXT_BODY);
+        notes.setLineSpacing(dp(4), 1.0f);
+        notes.setPadding(0, dp(14), dp(5), dp(12));
 
         String formatted = formatChangelog(changelog);
 
         if (Build.VERSION.SDK_INT >= 24) {
-
             notes.setText(Html.fromHtml(
                     formatted,
                     Html.FROM_HTML_MODE_LEGACY
             ));
-
         } else {
-
             notes.setText(Html.fromHtml(formatted));
         }
 
@@ -372,20 +475,15 @@ public class MainActivity extends Activity {
                 scrollView,
                 new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        dp(390)
+                        dp(320)
                 )
         );
 
-        // Dialog buttons
+        // Dialog
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(layout)
-
-                .setNegativeButton(
-                        "Later",
-                        null
-                )
-
+                .setNegativeButton("Later", null)
                 .setPositiveButton(
                         "Update Now",
                         (d, which) -> {
@@ -408,9 +506,41 @@ public class MainActivity extends Activity {
                             }
                         }
                 )
-
                 .setCancelable(true)
                 .create();
+
+        dialog.setOnShowListener(d -> {
+
+            if (dialog.getWindow() != null) {
+                dialog.getWindow().setBackgroundDrawable(
+                        roundedBackground(DARK_BG, 20)
+                );
+
+                dialog.getWindow().setDimAmount(0.65f);
+            }
+
+            Button laterButton = dialog.getButton(
+                    AlertDialog.BUTTON_NEGATIVE
+            );
+
+            Button updateButton = dialog.getButton(
+                    AlertDialog.BUTTON_POSITIVE
+            );
+
+            if (laterButton != null) {
+                laterButton.setTextColor(TEXT_SECONDARY);
+                laterButton.setTextSize(12);
+                laterButton.setTypeface(null, Typeface.BOLD);
+                laterButton.setAllCaps(false);
+            }
+
+            if (updateButton != null) {
+                updateButton.setTextColor(ACCENT);
+                updateButton.setTextSize(12);
+                updateButton.setTypeface(null, Typeface.BOLD);
+                updateButton.setAllCaps(false);
+            }
+        });
 
         dialog.show();
     }
