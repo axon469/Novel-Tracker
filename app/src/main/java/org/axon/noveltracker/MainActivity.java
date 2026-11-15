@@ -2,9 +2,11 @@
 package org.axon.noveltracker;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.util.Base64;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -15,7 +17,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends Activity {
 
@@ -23,6 +32,9 @@ public class MainActivity extends Activity {
 
     private static final int REQUEST_FILE = 1001;
     private static final int REQUEST_SAVE = 1002;
+
+    private static final String UPDATE_JSON =
+            "https://raw.githubusercontent.com/axon469/Novel-Tracker/main/update.json";
 
     private ValueCallback<Uri[]> fileCallback;
     private byte[] pendingSaveData;
@@ -101,6 +113,133 @@ public class MainActivity extends Activity {
         });
 
         webView.loadUrl("file:///android_asset/index.html");
+
+        checkForUpdates();
+    }
+
+    private void checkForUpdates() {
+
+        new Thread(() -> {
+            HttpURLConnection connection = null;
+
+            try {
+                URL url = new URL(UPDATE_JSON);
+                connection = (HttpURLConnection)
+                        url.openConnection();
+
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(10000);
+                connection.setReadTimeout(10000);
+                connection.setUseCaches(false);
+                connection.setRequestProperty(
+                        "Cache-Control", "no-cache");
+
+                if (connection.getResponseCode() != 200) {
+                    return;
+                }
+
+                InputStream input = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(input));
+
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                reader.close();
+
+                JSONObject json = new JSONObject(
+                        response.toString());
+
+                int remoteVersionCode =
+                        json.getInt("versionCode");
+
+                String remoteVersionName =
+                        json.optString("versionName", "New version");
+
+                String apkUrl =
+                        json.getString("apkUrl");
+
+                String changelog =
+                        json.optString(
+                                "changelog",
+                                "A new version is available.");
+
+                long installedVersionCode;
+
+                if (Build.VERSION.SDK_INT >= 28) {
+                    installedVersionCode =
+                            getPackageManager()
+                                    .getPackageInfo(
+                                            getPackageName(), 0)
+                                    .getLongVersionCode();
+                } else {
+                    installedVersionCode =
+                            getPackageManager()
+                                    .getPackageInfo(
+                                            getPackageName(), 0)
+                                    .versionCode;
+                }
+
+                if (remoteVersionCode > installedVersionCode) {
+
+                    runOnUiThread(() -> showUpdateDialog(
+                            remoteVersionName,
+                            changelog,
+                            apkUrl
+                    ));
+                }
+
+            } catch (Exception ignored) {
+                // No popup if the update check fails.
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
+                }
+            }
+
+        }).start();
+    }
+
+    private void showUpdateDialog(
+            String version,
+            String changelog,
+            String apkUrl) {
+
+        if (isFinishing()) {
+            return;
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle("Update Available")
+                .setMessage(
+                        "Novel Tracker " + version
+                                + " is available.\n\n"
+                                + changelog
+                )
+                .setPositiveButton(
+                        "Update Now",
+                        (dialog, which) -> {
+                            try {
+                                Intent intent = new Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse(apkUrl));
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                Toast.makeText(
+                                        this,
+                                        "Unable to open download link",
+                                        Toast.LENGTH_LONG
+                                ).show();
+                            }
+                        }
+                )
+                .setNegativeButton("Update Later", null)
+                .setCancelable(true)
+                .show();
     }
 
     private class AndroidBridge {
