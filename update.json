@@ -1,6 +1,6 @@
 {
-  "versionCode": 2,
-  "versionName": "1.0.7",
+  "versionCode": 4,
+  "versionName": "1.0.9",
   "apkUrl": "https://github.com/axon469/Novel-Tracker/releases/latest/download/Novel-Tracker.apk",
-  "changelog": "Version 1.0.7: Improved backup export, file importing, and Android file handling."
+  "changelog": "# Novel Tracker DB v1.0.9\n\nA focused update improving **navigation, version management, item handling, and Android reliability**.\n\n## ✨ What's New\n\n- Fixed Home page scroll-position restoration when returning from a novel.\n- Fixed issues with the Novel Design page.\n- Added a redesigned **Novel Version Selector** in the previous search location.\n- Version names can now be renamed **globally across all novels** using that version.\n- Removed individual novel version creation to keep version management consistent.\n- Latest novel version/data is now shown first by default.\n- Improved tag priority so newer version metadata overrides outdated tags.\n- Improved item text readability while preserving Title and Synopsis styling.\n- Added **Delete Item** with confirmation and **Duplicate Item** through the existing item menu.\n- Improved Android back button, keyboard, safe-area, file selection, lifecycle, screen restoration, and offline persistence.\n- Preserved the existing minimalist design and local data structure.\n\n### 📱 Android\n\nImproved the overall Android experience so the app behaves more reliably as an offline application rather than simply a web page running inside Android."
 }
