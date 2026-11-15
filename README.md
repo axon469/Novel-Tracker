@@ -21,7 +21,7 @@
 
 ### Android
 
-1. Open the [GitHub Releases page]((https://github.com/axon469/Novel-Tracker/releases)).
+1. Open the [GitHub Releases page](https://github.com/axon469/Novel-Tracker/releases).
 2. Open the latest release.
 3. Download the APK file.
 4. Install it on your Android device.
