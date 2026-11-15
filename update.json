@@ -2,18 +2,5 @@
   "versionCode": 2,
   "versionName": "1.0.7",
   "apkUrl": "https://github.com/axon469/Novel-Tracker/releases/latest/download/Novel-Tracker.apk",
-  "changelog": "Version 1.0.7: ✨ Added
-- Custom novel tags with create, edit, delete, and default-tag support.
-- Novel version selector and version-specific data management.
-- Home page sorting by Title, Last Modification, and Date of Insertion.
-- Large-cover and small-cover/title display modes.
-- Improved ZIP backup and import support.
-- Smart matching of imported novels with existing titles and versions.
-- Automatic 🔞 Adult tag detection and (A) reference-prefix handling.
-- Compact About the Developer section with social links.
-- Backup and restore compatibility.
-- ZIP export/import structure.
-- Novel version migration and duplicate detection.
-- Settings page design and overall UI consistency.
-Abu Bokker (axon469)."
+  "changelog": "Version 1.0.7: Improved backup export, file importing, and Android file handling."
 }
