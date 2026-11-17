@@ -1,7 +1,7 @@
 
 {
-  "versionCode": 5,
-  "versionName": "1.1.0",
+  "versionCode": 9,
+  "versionName": "1.1.4",
   "apkUrl": "https://github.com/axon469/Novel-Tracker/releases/latest/download/Novel-Tracker.apk",
-  "changelog": "# Novel Tracker DB v1.1.0\n\nA major **performance and usability update** focused on large databases and smoother navigation.\n\n## 🚀 Performance\n- Optimized navigation and reduced delays when returning from novel details.\n- Improved performance for **100 MB+ offline databases**.\n- Reduced unnecessary database reads/writes, rendering, sorting, filtering, and calculations.\n- Added lightweight **Skeleton Loading** for slower pages and large lists.\n- Added **Lazy Loading** and optimized scrolling for large grid/list views.\n- Prioritized visible content to improve responsiveness.\n\n## 🎨 Improvements\n- Added a compact **custom color picker** with hue and brightness controls alongside existing preset colors.\n- Version Selector can now be closed by tapping outside the popup.\n- Improved overall loading and interaction performance.\n\n## 🐛 Fixed\n- Fixed repetitive toast notifications appearing after selecting multiple versions or reopening app sections.\n\n**Focus:** Faster startup, smoother navigation, better scrolling, and improved performance with large offline databases."
+  "changelog": "# Novel Tracker DB v1.1.4\n\nA major update focused on improved database storage, smoother navigation, and better performance with large libraries.\n\n## Performance\n- Moved the novel database to on-device IndexedDB storage.\n- Improved performance when working with large libraries.\n- Added lazy loading for covers and large lists.\n- Added skeleton loading placeholders.\n- Improved back navigation and scrolling.\n\n## Improvements\n- Added a custom color wheel for category colors.\n- Improved the Version Selector interaction.\n- Added the ability to close the Version Selector by tapping outside it.\n\n**Focus:** Better storage, faster navigation, and a smoother experience."
 }
