@@ -7,7 +7,7 @@
 **A personal space to organize the novels you read and keep track of every detail.**
 
 
-![Version](https://img.shields.io/badge/version-1.1.0-cf9f86?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.1.4-cf9f86?style=for-the-badge)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -34,15 +34,15 @@ Your library and its data are stored locally on your device. No account is requi
 <table align="center">
   <tr>
     <td align="center"><img src="screenshots/home.png" width="190" alt="Home"></td>
+    <td align="center"><img src="screenshots/history.png" width="190" alt="History and favorites"></td>
+    <td align="center"><img src="screenshots/search.png" width="190" alt="Advanced search"></td>
     <td align="center"><img src="screenshots/novel.png" width="190" alt="Inside a novel"></td>
-    <td align="center"><img src="screenshots/item.png" width="190" alt="Item page"></td>
-    <td align="center"><img src="screenshots/design.png" width="190" alt="Design style"></td>
   </tr>
   <tr>
-    <td align="center"><sub><b>Home</b><br>Covers, sort, and view switch</sub></td>
-    <td align="center"><sub><b>Novel</b><br>Colored category tabs and versions</sub></td>
-    <td align="center"><sub><b>Item</b><br>Title and synopsis</sub></td>
-    <td align="center"><sub><b>Design style</b><br>Backgrounds you can tune</sub></td>
+    <td align="center"><sub><b>Home</b><br>Covers, stars, sort, and view switch</sub></td>
+    <td align="center"><sub><b>History</b><br>Favorites and recently modified</sub></td>
+    <td align="center"><sub><b>Advanced search</b><br>MC name, rating, last chapter</sub></td>
+    <td align="center"><sub><b>Novel</b><br>Colored tabs and versions</sub></td>
   </tr>
 </table>
 
@@ -99,18 +99,11 @@ Android may ask you to allow installation from your browser or file manager. Onl
 2. Open it in a modern browser.
 3. Start tracking your novel.
 
-## Roadmap
-
-- [ ] Improved backup and restore options
-- [ ] Cloud backup support
-- [ ] Novel data version selector
-- [ ] Additional library and reading statistics
-
 ## Version history
 
 | Version | Notes |
 | --- | --- |
-| **1.1.0** | Database moved to on-device storage for large libraries, faster back navigation, lazy loading and skeleton placeholders, color wheel for categories, tap-outside to close versions. |
+| **1.1.4** | Database moved to on-device storage for large libraries, faster back navigation, lazy loading and skeleton placeholders, color wheel for categories, tap-outside to close versions. |
 | **1.0.9** | Home keeps its scroll place, version badge and list, shared version names, white item text, duplicate and delete items, Android polish. |
 | **1.0.7** | Tags, homepage sort and view switch, version selector, zip import with versions, export fixes, About the developer, and a new Design style page. |
 | **1.0.5** | Category colors, templates, novel information, Clear cover, and export to zip. |
@@ -123,6 +116,6 @@ Android may ask you to allow installation from your browser or file manager. Onl
 
 <div align="center">
 
-Novel Tracker DB · Version 1.0.7 · Made by Abu Bokker (axon469)
+Novel Tracker DB · Version 1.1.4 · Made by Abu Bokker (axon469)
 
 </div>
