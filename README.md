@@ -21,13 +21,8 @@
 
 ## About
 
-Novel Tracker DB is a personal organizer designed for readers who want to keep detailed records of the novels they follow.
+Novel Tracker DB is built for readers who keep their own notes on the novels they follow: characters, events, locations, and anything else worth remembering. Each novel has its own database, organized into categories you name yourself. Everything stays on your device, with no account and no internet requirement.
 
-Create a separate space for each novel and organize your notes into customizable categories. Keep track of characters, events, locations, story details, and anything else you want to remember.
-
-Your library and its data are stored locally on your device. No account is required, and the app is designed to work offline.
-
----
 
 ## Screenshots
 
@@ -52,34 +47,29 @@ Your library and its data are stored locally on your device. No account is requi
 
 ## Features
 
-| Feature | Description |
-|---|---|
-| **Novel Library** | Add novels with their titles and original titles. Browse your collection in a clean, two-column cover grid. |
-| **Custom Categories** | Create, rename, and organize categories with scrollable tabs. |
-| **Items & Notes** | Give each item its own page with Title and Synopsis fields that save as you type. |
-| **Novel Management** | Edit novel details, set or clear cover images, and delete novels from the three-dot menu. |
-| **Category Colors** | Customize category title colors to make each novel's organization your own. |
-| **Templates** | Save a novel's category structure as a reusable template, with or without its items. |
-| **Novel Information** | View useful statistics, including categories, items, characters, and the largest category. |
-| **Import & Export** | Import supported `.nov` backups and export selected or all novels in supported formats, packaged as a ZIP archive. |
-| **Themes** | Choose between Dark, Light, and AMOLED Black themes. |
-| **Design Customization** | Personalize the background with None, Dots, Star, Grid, or your own photo. Adjust opacity and size. |
-| **Simple Navigation** | Access Home, Add, and Settings from a compact floating navigation bar. |
+## Features
 
-## Getting Started
-
-1. **Add a novel:** Tap the plus button in the navigation bar and enter the novel's details.
-2. **Create categories:** Open your novel and add your first category.
-3. **Add items:** Use the Add Item option to record characters, events, locations, or other notes.
-4. **Organize your library:** Add more categories using the plus button at the end of the category tabs.
-5. **Find information:** Use the search icon to find items within a category.
-
-## Settings
-
-- **Theme:** Switch between Dark, Light, and AMOLED Black.
-- **Design Style:** Customize the app's background and visual appearance.
-- **General:** Import backups and export your novel collection.
-- **About:** View the app name and current version.
+| Area | What you can do |
+| --- | --- |
+| **History** | A page next to the + button with your Favorites at the top and Recently modified below. Both use the same novels as Home, so any edit shows everywhere at once. |
+| **Favorites** | Tap the star beside the three dots on any novel. The choice is kept after restarting the app. |
+| **Search** | The Search tab opens a compact search bar at the top of Home. Find novels by title or original title. |
+| **Advanced search** | Tap Advanced to filter by main character name, a rating range (for example 9.5 to 9.9), and the last chapter you read (equal to, above, below, or within a range). Values come from your existing novel notes. |
+| **Automatic backup** | Choose weekly, monthly, or every three months and a folder. The first time you pick a folder, a short options popup lets you include app data and settings and choose the novel format (default app format, `.nov`, or `.txt`). Your choices are remembered and can be changed any time under Automatic backup. A backup is saved when the app opens or returns to the screen and one is due. |
+| **Page settings** | Pick which page opens when the app starts: last screen, Home, History, Settings, or one specific novel found by title or original title. |
+| **Library** | Add novels with a title, an original title, a template, and a tag. Switch between a big-cover grid and a compact title list. Sort by title, last modification, or date of insertion. The Home list keeps its place when you come back from a novel. |
+| **Tags** | Every novel starts as Normal. Create, assign, and delete your own tags. A leading 🔞 in an imported title assigns the Adult tag automatically. |
+| **Covers** | Set a cover from your gallery or clear it. The cover fills the card behind a translucent title bar. |
+| **Categories** | Create as many as you like and switch with scrollable tabs. A novel always opens on its first category. Pick a color from the presets or open the color wheel to choose any color. Tap the active tab to rename it. |
+| **Items** | Open any item on its own page with Title and Synopsis fields that save as you type. Duplicate or delete an item from its menu. Search inside a category. |
+| **Versions** | Keep several versions of a novel's data. The V-badge in the header opens them, shows the latest, and lets you switch. The badge number is read from the version name, so "Version 5" always shows V5. Renaming a version renames it in every novel that has it. Tap outside the list to close it. |
+| **Arthur Other Works** | In categories named Arthur Other Work or Arthur Other Works, each item that matches another novel in your library gets a View Original Novel button. The novel you are already viewing never gets one. |
+| **Templates** | Save a novel's structure as a template and pick it when adding a new novel. |
+| **Information** | See statistics for each novel: categories, items, characters, tag, versions, and more. |
+| **Export** | Back up all novels or only the ones you pick, as a zip, in Novel Tracker DB, `.nov`, or `.txt` format. App settings can be included. |
+| **Import** | Import `.nov`, `.txt`, Novel Tracker DB files, or a zip of them. Send novels to the homepage or add them as a version of matching novels. |
+| **Theme** | Dark, Light, or AMOLED black. |
+| **Design style** | A background of None, Dots, Star, Grid, or your own photo, with opacity and size controls (and darkness for photos). |
 
 
 ## Installation
@@ -116,6 +106,6 @@ Android may ask you to allow installation from your browser or file manager. Onl
 
 <div align="center">
 
-Novel Tracker DB · Version 1.1.4 · Made by Abu Bokker (axon469)
+Novel Tracker DB · Version 1.1.6 · Made by Abu Bokker (axon469)
 
 </div>
