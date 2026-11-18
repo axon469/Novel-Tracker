@@ -39,6 +39,7 @@ import java.net.URL;
 public class MainActivity extends Activity {
 
     private WebView webView;
+    private NtdbBridge ntdbBridge;
 
     private static final int REQUEST_FILE = 1001;
     private static final int REQUEST_SAVE = 1002;
@@ -70,7 +71,8 @@ public class MainActivity extends Activity {
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
 
-        webView.addJavascriptInterface(new AndroidBridge(), "NTDB");
+        ntdbBridge = new NtdbBridge(this, webView);
+        webView.addJavascriptInterface(ntdbBridge, "NTDB");
 
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -546,73 +548,6 @@ public class MainActivity extends Activity {
     }
 
     // ==========================================
-    // ANDROID BACKUP BRIDGE
-    // ==========================================
-
-    private class AndroidBridge {
-
-        @JavascriptInterface
-        public void save(String filename, String base64Data) {
-
-            try {
-                if (base64Data == null || base64Data.isEmpty()) {
-                    return;
-                }
-
-                pendingSaveData = Base64.decode(
-                        base64Data,
-                        Base64.DEFAULT
-                );
-
-                pendingFileName = filename;
-
-                runOnUiThread(() -> {
-
-                    try {
-                        Intent intent = new Intent(
-                                Intent.ACTION_CREATE_DOCUMENT
-                        );
-
-                        intent.addCategory(
-                                Intent.CATEGORY_OPENABLE
-                        );
-
-                        intent.setType("application/zip");
-
-                        intent.putExtra(
-                                Intent.EXTRA_TITLE,
-                                pendingFileName != null
-                                        ? pendingFileName
-                                        : "NovelTracker-Backup.zip"
-                        );
-
-                        startActivityForResult(
-                                intent,
-                                REQUEST_SAVE
-                        );
-
-                    } catch (Exception e) {
-
-                        Toast.makeText(
-                                MainActivity.this,
-                                "Unable to save backup",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                });
-
-            } catch (Exception e) {
-
-                runOnUiThread(() -> Toast.makeText(
-                        MainActivity.this,
-                        "Could not prepare backup",
-                        Toast.LENGTH_SHORT
-                ).show());
-            }
-        }
-    }
-
-    // ==========================================
     // FILE IMPORT AND BACKUP EXPORT RESULTS
     // ==========================================
 
@@ -627,6 +562,14 @@ public class MainActivity extends Activity {
                 resultCode,
                 data
         );
+
+        if (ntdbBridge != null &&
+                ntdbBridge.onActivityResult(
+                        requestCode,
+                        resultCode,
+                        data)) {
+            return;
+        }
 
         if (requestCode == REQUEST_FILE) {
 
