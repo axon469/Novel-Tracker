@@ -1,7 +1,7 @@
 
 {
-  "versionCode": 9,
-  "versionName": "1.1.4",
+  "versionCode": 10,
+  "versionName": "1.1.6",
   "apkUrl": "https://github.com/axon469/Novel-Tracker/releases/latest/download/Novel-Tracker.apk",
-  "changelog": "# Novel Tracker DB v1.1.4\n\nA major update focused on improved database storage, smoother navigation, and better performance with large libraries.\n\n## Performance\n- Moved the novel database to on-device IndexedDB storage.\n- Improved performance when working with large libraries.\n- Added lazy loading for covers and large lists.\n- Added skeleton loading placeholders.\n- Improved back navigation and scrolling.\n\n## Improvements\n- Added a custom color wheel for category colors.\n- Improved the Version Selector interaction.\n- Added the ability to close the Version Selector by tapping outside it.\n\n**Focus:** Better storage, faster navigation, and a smoother experience."
+  "changelog": "# Novel Tracker DB v1.1.6\n\nA major update focused on **automatic backups, version management, startup preferences, UI improvements, and performance optimization**.\n\n## ✨ Added\n- 💾 Added Android **Automatic Backup** with native folder selection and persistent backup permissions.\n- Added configurable backup data, export format, and automatic ZIP backup preferences.\n- 🔢 Added automatic **version number detection** for version badges (`Version 5` → `V5`).\n- 📖 Added **View Original Novel** for Arthur Other Work(s), with automatic current-novel exclusion.\n- 🏠 Added **Startup Page Selection** for Home, History, Settings, or a specific novel.\n- 🎨 Improved Home page spacing by reducing Favorite/three-dot controls and slightly reducing novel title size.\n\n## 🔧 Fixed & Improved\n- Fixed duplicated/flickering remaining-time values during large imports.\n- Improved app-wide loading speed, responsiveness, memory usage, and stability.\n- Fixed various minor bugs, broken interactions, and UI inconsistencies.\n- Preserved existing features, data, design, and offline functionality."
 }
