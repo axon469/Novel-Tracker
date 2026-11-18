@@ -144,6 +144,14 @@ nav{width:min(calc(100% - 24px),430px)!important}.tab{font-size:10.5px}
 .arow{display:flex;align-items:center;gap:8px;margin-top:12px}.arow>span{width:64px;flex:none;color:var(--muted);font-size:14px}.arow>i{font-style:normal;color:var(--muted)}
 .arow .in{margin:0;padding:11px 12px;flex:1;min-width:0;font-size:15px}.arow .chips{margin:0;gap:6px}.arow .chip{padding:7px 12px}
 .lt{display:block;-webkit-line-clamp:unset;overflow:visible}.ltt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.lb{padding:5px 2px 5px 12px;min-height:50px;font-size:13.5px;gap:0}.lb span{line-height:1.25}
+.lb .ib,.lb .fv{width:26px;height:32px}.lb .ib svg{width:18px;height:18px}.lb .fv svg{width:17px;height:17px}
+.lr .ib,.lr .fv{width:32px}.lr .fv svg{width:18px;height:18px}.ltt,.lt{font-size:15px}
+.ow{display:inline-block;margin-top:12px;padding:8px 14px;border-radius:16px;border:1px solid var(--accent);color:var(--accent);font-size:13px;font-weight:700}.ow:active{background:var(--raised)}
+.snr{min-height:60px;padding:8px 12px 8px 8px}.snr .chip{padding:6px 12px;margin-left:auto}.snr.on{background:var(--raised)}
+.b1:disabled{opacity:.45}
+main{scrollbar-width:thin}
+@media (hover:hover){.row:hover,.lr:hover,.ci:hover,.vrow:hover,.mb button:hover,.tab:hover{background:var(--raised)}.nv:hover{border-color:var(--muted)}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -196,9 +204,9 @@ function uid(){return Math.random().toString(36).slice(2,8)+Date.now().toString(
 function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove("on");},1800);}
 var searching=false,q="",dlgOk=null,mid="",pend=[],pcol="",tsel="",pset=null,tagSel="normal",scr={},curR="",bgPhoto=null;
 
-var K="ntdb:settings",S={theme:"dark",bg:null,sort:"title",view:"grid",auto:{f:"off",last:0,fmt:"ntdb",ws:1,fd:"",nat:0}},DB={novels:[],tpls:[],tags:[],vnm:{v1:"Version 1"},vdk:"v1"},IDB=null,IDX={},booting=true,dirty={},dirtyMeta=false,hq=[],dbv=0,sc=null,scKey="",cvC={},cvQ=[],PG=null,lastErr=0,svT=0,qT=0,cvObs=null,cpS={h:10,s:.6,v:.9},cpm="",hs={on:false,q:"",mc:"",rmin:null,rmax:null,cop:"=",c1:null,c2:null},freshId="",ntdbCb=null,autoDir=null,autoBusy=false,autoWait=false,rc=null,rcKey="";
+var K="ntdb:settings",S={theme:"dark",bg:null,sort:"title",view:"grid",auto:{f:"off",last:0,fmt:"ntdb",ws:0,fd:"",nat:0,cfg:0},start:{t:"last",id:""}},DB={novels:[],tpls:[],tags:[],vnm:{v1:"Version 1"},vdk:"v1"},IDB=null,IDX={},booting=true,dirty={},dirtyMeta=false,hq=[],dbv=0,sc=null,scKey="",cvC={},cvQ=[],PG=null,lastErr=0,svT=0,qT=0,cvObs=null,cpS={h:10,s:.6,v:.9},cpm="",hs={on:false,q:"",mc:"",rmin:null,rmax:null,cop:"=",c1:null,c2:null},freshId="",ntdbCb=null,autoDir=null,autoBusy=false,autoWait=false,rc=null,rcKey="",exSel={},snSel="",psetX=null;
 try{var a0=JSON.parse(localStorage.getItem(K));if(a0)for(var k0 in S)if(typeof a0[k0]===typeof S[k0])S[k0]=a0[k0];}catch(e){}
-S.auto=Object.assign({f:"off",last:0,fmt:"ntdb",ws:1,fd:"",nat:0},S.auto);
+S.auto=Object.assign({f:"off",last:0,fmt:"ntdb",ws:0,fd:"",nat:0,cfg:0},S.auto);S.start=Object.assign({t:"last",id:""},S.start);if(S.auto.fd&&!S.auto.cfg)S.auto.cfg=1;
 function svS(){try{localStorage.setItem(K,JSON.stringify(S));}catch(e){}}
 function rq(r){return new Promise(function(res,rej){r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
 function tx(n,m){return IDB.transaction(n,m||"readonly");}
@@ -274,8 +282,17 @@ return P;}
 function sen(k){return '<div class="sen'+(k==="grid"?" grid":"")+'">'+(k==="grid"?'<div class="sk skc"></div><div class="sk skc"></div>':'<div class="sk skr"></div><div class="sk skr"></div>')+'</div>';}
 function skelGrid(k){var s="",i;for(i=0;i<(k==="grid"?6:6);i++)s+=k==="grid"?'<div class="sk skc"></div>':'<div class="sk skr"></div>';return '<div class="'+(k==="grid"?"grid":"ll")+'">'+s+'</div>';}
 function itemsArr(c){var t=q.toLowerCase();return t?c.items.filter(function(x){return ((x.title||"")+" "+(x.note||"")).toLowerCase().indexOf(t)>-1;}):c.items;}
-function fillItems(n,c,first){var box=$("#lst");if(!box)return;var arr=itemsArr(c);if(!arr.length){stopProg();box.innerHTML='<div class="empty">'+(q?"No matches":"No items yet")+'</div>';return;}
-startProg(box,arr,function(x){return '<div class="ci" data-a="go" data-v="n/'+n.id+'/i/'+x.id+'"><span class="txt"><b>'+esc(x.title||"")+'</b>'+(x.note?'<small class="cl">'+esc(x.note.slice(0,600))+'</small>':'')+'</span></div>';},40,first);}
+var tiC=null,tiKey="";
+function nrm(s){return String(s||"").toLowerCase().replace(/[\s\u3000]+/g,"").replace(/[^\p{L}\p{N}]/gu,"");}
+function titleIndex(){var key="t|"+dbv;if(tiC&&tiKey===key)return tiC;var m={};DB.novels.forEach(function(x){[x.title,x.orig].forEach(function(s){var k=nrm(cln(s).t);if(k&&!m[k])m[k]=x.id;});});tiC=m;tiKey=key;return m;}
+function owTarget(it){var m=titleIndex(),cs=[it.title],t=it.note||"",r=/^\s*(?:OG\s*TITLE|ORIGINAL\s*TITLE|TITLE)\s*[:：]\s*(.+?)\s*$/gim,x;while((x=r.exec(t)))cs.push(x[1]);for(var i=0;i<cs.length;i++){var k=nrm(cs[i]);if(k&&m[k])return m[k];}return null;}
+function vnum(v,i){var nm=vname(v),m=/version\s*(\d+)/i.exec(nm)||/\bv\s*(\d+)/i.exec(nm)||/(\d+)/.exec(nm);return m?parseInt(m[1],10):(i+1);}
+function vlatest(n){var bi=0,bn=-1;n.vers.forEach(function(v,i){var k=vnum(v,i);if(k>=bn){bn=k;bi=i;}});return bi;}
+function fmtDur(s){return s<60?s+" s":Math.floor(s/60)+" min "+(s%60)+" s";}
+function mapCats(a){return (a||[]).map(function(c){return {id:uid(),name:c.name||"Category",color:c.color||"",items:(c.items||[]).map(function(i){return {id:uid(),title:i.title||"",note:i.note||""};})};});}
+function tagByName(nm){var l=nm.toLowerCase(),t=DB.tags.filter(function(x){return x.name.toLowerCase()===l;})[0];if(!t){t={id:l==="adult"?"adult":uid(),name:nm};DB.tags.push(t);svM();}return t.id;}
+function fillItems(n,c,first){var box=$("#lst");if(!box)return;var arr=itemsArr(c),ow=/^\s*arthur\s+other\s+works?\s*$/i.test(c.name);if(!arr.length){stopProg();box.innerHTML='<div class="empty">'+(q?"No matches":"No items yet")+'</div>';return;}
+startProg(box,arr,function(x){var tg=ow?owTarget(x):null;return '<div class="ci" data-a="go" data-v="n/'+n.id+'/i/'+x.id+'"><span class="txt"><b>'+esc(x.title||"")+'</b>'+(x.note?'<small class="cl">'+esc(x.note.slice(0,600))+'</small>':'')+'</span>'+(tg&&tg!==n.id?'<button class="ow" data-a="go" data-v="n/'+tg+'">View Original Novel</button>':'')+'</div>';},40,first);}
 function snap(){return {st:$("main").scrollTop,n:PG?PG.i:0};}
 
 function parseRating(s){var m=/(\d+(?:[.,]\d+)?)\s*(?:\/\s*(\d+(?:[.,]\d+)?))?/.exec(s||"");if(!m)return null;var a=parseFloat(m[1].replace(",",".")),b=m[2]?parseFloat(m[2].replace(",",".")):0;
@@ -304,6 +321,8 @@ return true;});}
 function homeStart(first){var box=$("#hl");if(!box)return;var arr=homeArr(),r2=$("#rc2");if(r2)r2.textContent=(hs.q||advCount())?arr.length:"";
 if(!arr.length){stopProg();box.innerHTML='<div class="empty" style="grid-column:1/-1">'+(hs.on?"No results":"No novels yet")+'</div>';var s=$(".sen");if(s)s.classList.remove("show");return;}
 startProg(box,arr,S.view==="grid"?function(x){return card(x);}:function(x){return lrow(x);},24,first,loadCovers);}
+
+function STARTL(){var T=S.start;return T.t==="novel"?(find(T.id)?"Novel: "+find(T.id).title:"Specific novel"):({last:"Last screen",home:"Home",history:"History",settings:"Settings"})[T.t];}
 
 function apply(){document.documentElement.setAttribute("data-theme",S.theme);$('meta[name="theme-color"]').setAttribute("content",S.theme==="light"?"#f6f5f3":S.theme==="amoled"?"#000":"#0b0b0c");applyBg();}
 var BG_LIMITS={dots:{o:[2,60,13],s:[20,80,39]},star:{o:[2,60,22],s:[30,120,56]},grid:{o:[2,40,9],s:[20,100,40]}};
@@ -353,18 +372,9 @@ function info(n){var it=0,ch=0,big=null;n.cats.forEach(function(c){it+=c.items.l
 var R=[["Name",n.title],["Original title",n.orig||"-"],["Categories",n.cats.length],["Items",it],["Characters in notes",ch],["Largest category",big?big.name+" ("+big.items.length+")":"-"],["Template",n.tpl==="empty"?"Empty":n.tpl],["Cover",n.hc?"Yes":"No"],["Tag",(DB.tags.filter(function(x){return x.id===n.tag;})[0]||{name:"Normal"}).name],["Versions",n.vers?n.vers.length:1]],d=$("#dlg");
 d.className="on";d.innerHTML='<div class="bx" data-out="1"><h2>Information</h2>'+R.map(function(r){return '<div class="ir"><span>'+r[0]+'</span><b>'+esc(r[1])+'</b></div>';}).join("")+'<div class="bt"><button class="b1" data-a="x">Close</button></div></div>';}
 function tplDlg(){var d=$("#dlg");d.className="on sheet";d.innerHTML='<div class="bx"><h2>Create template</h2><input class="in" id="f0" placeholder="Name"><label class="sr">Include categories<input type="checkbox" class="sw" id="t1" checked></label><label class="sr">Include items<input type="checkbox" class="sw" id="t2"></label><div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" data-a="tsave">Save</button></div></div>';}
-function exDlg(){if(!DB.novels.length){toast("No novels to export");return;}var d=$("#dlg");d.className="on sheet";
-d.innerHTML='<div class="bx"><h2>Export</h2><p class="mt">Which novels do you want to export?</p><label class="sr">All novels<input type="checkbox" class="cb" id="ea" checked></label><div id="el" style="display:none"><input class="in" id="es" placeholder="Search novels" style="margin:0 0 6px"><div class="lst">'+DB.novels.map(function(x){return '<label class="sr" data-t="'+esc((x.title+" "+x.orig).toLowerCase())+'">'+esc(x.title)+'<input type="checkbox" class="cb ex" value="'+x.id+'"></label>';}).join("")+'</div></div><label class="sr">Include app settings<input type="checkbox" class="cb" id="eset"></label><p class="mt">File format</p>'+[["ntdb","Novel Tracker DB (default)"],["nov",".nov"],["txt",".txt"]].map(function(f,i){return '<label class="sr">'+f[1]+'<input type="checkbox" class="cb ef" value="'+f[0]+'"'+(i?'':' checked')+'></label>';}).join("")+'<div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" data-a="exgo">Create backup</button></div></div>';}
 function safe(t){return String(t).replace(/[\\\/:*?"<>|]+/g,"_").trim().slice(0,60)||"novel";}
-function conv(n,ff){var cv=n.cover||"";
-if(ff==="ntdb")return JSON.stringify({app:"novel-tracker-db",version:1,title:n.title,orig:n.orig,cover:cv,cats:n.cats.map(function(c){return {name:c.name,color:c.color||"",items:c.items.map(function(i){return {title:i.title,note:i.note};})};})});
-var now=Date.now();return JSON.stringify({version:5,code:n.id.slice(0,8),title:n.title,description:n.orig,last_update_date:now,last_backup_date:now,cover:cv.replace(/^data:image\/\w+;base64,/,""),categories:n.cats.map(function(c,ci){return {code:c.id.slice(0,8),title:c.name,color:c.color?(0xFF000000|parseInt(c.color.slice(1),16))>>>0:4293467747,ranking:ci+1,items:c.items.map(function(i,ii){return {code:i.id.slice(0,8),title:i.title,synopsis:i.note,ranking:ii+1,status:"1"};})};}),statuses:[{code:"1",title:"Todo",color:-2697255,ranking:1}],books:[]});}
 var lastZip=null;
 function dl(blob,nm){var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nm;document.body.appendChild(a);a.click();setTimeout(function(){a.remove();URL.revokeObjectURL(a.href);},4000);}
-function deliver(blob,nm,dir,cb){lastZip={b:blob,n:nm};
-if(window.NTDB&&NTDB.save){var r=new FileReader();r.onload=function(){try{NTDB.save(nm,String(r.result).split(",")[1]);cb(true);}catch(e){cb(false);}};r.readAsDataURL(blob);return;}
-if(dir){blob.arrayBuffer().then(function(buf){return dir.getFileHandle(nm,{create:true}).then(function(h){return h.createWritable().then(function(w){return w.write(buf).then(function(){return w.close();});}).then(function(){return h.getFile();});});}).then(function(f){cb(f.size===blob.size);},function(){cb(false);});return;}
-dl(blob,nm);cb(true);}
 function shrink(src,mx,cb){var im=new Image();im.onload=function(){var s=Math.min(1,mx/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.max(1,im.width*s);c.height=Math.max(1,im.height*s);c.getContext("2d").drawImage(im,0,0,c.width,c.height);cb(c.toDataURL("image/jpeg",.75));};im.onerror=function(){cb("");};im.src=src;}
 function pick(inp,mx,cb){inp.addEventListener("change",function(){var f=this.files[0];this.value="";if(!f)return;var r=new FileReader();r.onerror=function(){toast("Could not read that image");};r.onload=function(){shrink(r.result,mx,cb);};r.readAsDataURL(f);});}
 pick($("#cf"),420,function(d){var nv=find(mid);if(nv&&d){nv.cover=d;sv();render();}});
@@ -374,16 +384,16 @@ var cs=d&&d.categories;if(!cs&&d&&d.revisions&&d.revisions.length){var r=d.revis
 if(!cs||!d.title)return null;
 return {id:uid(),title:String(d.title),orig:String(d.description||""),tpl:"empty",cover:"",rc:d.cover||"",sel:"",cats:cs.slice().sort(rk).map(function(c){return {id:uid(),name:String(c.title||"").trim()||"Category",color:typeof c.color==="number"?"#"+("00000"+(c.color&16777215).toString(16)).slice(-6):"",items:(c.items||[]).slice().sort(rk).map(function(i){return {id:uid(),title:String(i.title||""),note:String(i.synopsis||"")};})};})};}
 function fmt(b){return b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(2)+" MB";}
-function readF(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){res(r.result);};r.onerror=function(){res(null);};if(/\.zip$/i.test(f.name))r.readAsArrayBuffer(f);else r.readAsText(f);});}
+function readF(f){return new Promise(function(res){var r=new FileReader();r.onload=function(){var ab=r.result,u=new Uint8Array(ab,0,Math.min(4,ab.byteLength));if(u[0]===0x50&&u[1]===0x4B)res(ab);else res(new TextDecoder("utf-8").decode(ab));};r.onerror=function(){res(null);};r.readAsArrayBuffer(f);});}
 function unzip(buf){var v=new DataView(buf),u=new Uint8Array(buf),e=buf.byteLength-22,td=new TextDecoder();while(e>=0&&v.getUint32(e,true)!==0x06054b50)e--;if(e<0)return Promise.reject();
 var n=v.getUint16(e+10,true),p=v.getUint32(e+16,true),o=[];
 for(var i=0;i<n;i++){var m=v.getUint16(p+10,true),cs=v.getUint32(p+20,true),nl=v.getUint16(p+28,true),xl=v.getUint16(p+30,true),cl=v.getUint16(p+32,true),lo=v.getUint32(p+42,true),nm=td.decode(u.subarray(p+46,p+46+nl)),ds=lo+30+v.getUint16(lo+26,true)+v.getUint16(lo+28,true);o.push({name:nm,m:m,d:u.subarray(ds,ds+cs)});p+=46+nl+xl+cl;}
 return Promise.all(o.map(function(f){if(f.name.slice(-1)==="/")return null;if(f.m===0)return {name:f.name,text:td.decode(f.d)};
 return new Response(new Blob([f.d]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text().then(function(t){return {name:f.name,text:t};},function(){return null;});})).then(function(a){return a.filter(Boolean);});}
 function cln(t){var ad=false;t=String(t||"").replace(/^(?:\s|\(A\)|🔞)+/,function(m){if(m.indexOf("🔞")>-1)ad=true;return "";});if(t.indexOf("🔞")>-1){ad=true;t=t.replace(/🔞/g,"");}return {t:t.trim(),ad:ad};}
-function norm(d){var n=norm0(d);if(!n)return n;var a=cln(n.title),b=cln(n.orig);n.title=a.t||"Untitled";n.orig=b.t;n.tag=(a.ad||b.ad)?"adult":"normal";return n;}
+function norm(d){var n=norm0(d);if(!n)return n;if(d.app==="novel-tracker-db"){n.fav=d.fav?1:0;n.cr=+d.created||0;n.md=+d.mod||0;n.tplName=d.tpl||"";n.tagName=typeof d.tag==="string"?d.tag:"";if(d.versions&&d.versions.length){n.vlist=d.versions.map(function(v){return {name:v.name||"Version 1",cats:mapCats(v.cats)};});n.vcur=+d.current||0;}}var a=cln(n.title),b=cln(n.orig);n.title=a.t||"Untitled";n.orig=b.t;n.tag=(a.ad||b.ad)?"adult":"normal";return n;}
 function kk(s){return cln(s).t.toLowerCase();}
-function parse(L){var out=[];L.forEach(function(g){g.forEach(function(e){try{var j=JSON.parse(e.text.replace(/^\uFEFF/,""));if(j&&j.app==="novel-tracker-db"&&j.settings)pset=j.settings;else{var nn=norm(j);if(nn)out.push(nn);}}catch(x){}});});return out;}
+function parse(L){var out=[];L.forEach(function(g){g.forEach(function(e){try{var j=JSON.parse(e.text.replace(/^\uFEFF/,""));if(j&&j.app==="novel-tracker-db"&&j.settings){pset=j.settings;psetX=j;}else{var nn=norm(j);if(nn)out.push(nn);}}catch(x){}});});return out;}
 $("#imf").addEventListener("change",function(){var fs=[].slice.call(this.files),bytes=0,bad=0;this.value="";if(!fs.length)return;pend=[];pset=null;
 Promise.all(fs.map(function(f){return readF(f).then(function(r){if(r===null){bad++;return [];}bytes+=f.size;return typeof r==="string"?[{name:f.name,text:r}]:unzip(r).catch(function(){return [];});});})).then(function(L){pend=parse(L);if(!pend.length&&!pset){toast(bad?"Could not read the selected file":"No supported backup found");return;}impDlg(bytes);});});
 function tagHtml(){return '<div class="tgs" id="tgs"><p class="mt">Tag</p><div class="chips">'+DB.tags.map(function(t){return '<span class="chip'+(t.id===tagSel?" on":"")+'" data-a="tg" data-id="'+t.id+'">'+esc(t.name)+(t.id==="normal"?"":'<b class="x" data-a="tgdel" data-id="'+t.id+'">×</b>')+'</span>';}).join("")+'<span class="chip pl" data-a="tgnew">+</span></div></div>';}
@@ -394,7 +404,7 @@ d.innerHTML='<div class="bx"><h2>Import backup</h2><p class="mt">'+(pend.length?
 +'<div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" data-a="goimp">Import it</button></div></div>';}
 function goImp(){var md=document.querySelector(".ei:checked"),mode=md?md.value:(pend.length?"nov":"set"),dv=document.querySelector(".ed:checked"),ver=!!dv&&dv.value==="ver"&&mode!=="set",vn=$("#vn")?$("#vn").value.trim():"";
 if(ver&&!vn){toast("Enter a version name");return;}
-if(pset&&mode!=="nov"){Object.keys(S).forEach(function(k){if(typeof pset[k]===typeof S[k])S[k]=pset[k];});S.bg=cleanBg(S.bg);apply();sv();}
+if(pset&&mode!=="nov"){Object.keys(S).forEach(function(k){if(k==="auto"||k==="start")return;if(typeof pset[k]===typeof S[k])S[k]=pset[k];});if(psetX){(psetX.tags||[]).forEach(function(t){if(!DB.tags.some(function(x){return x.id===t.id||x.name.toLowerCase()===t.name.toLowerCase();}))DB.tags.push(t);});(psetX.tpls||[]).forEach(function(t){if(!DB.tpls.some(function(x){return x.name===t.name;}))DB.tpls.push(t);});Object.keys(psetX.vnm||{}).forEach(function(k){if(!DB.vnm[k])DB.vnm[k]=psetX.vnm[k];});svM();}S.bg=cleanBg(S.bg);apply();sv();}
 if(mode==="set"||!pend.length){$("#dlg").classList.remove("on");render();toast("Settings imported");return;}
 runImp(pend,ver,vn);}
 var SOC='<a href="https://github.com/axon469" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" class="f"><path d="M12 .3a12 12 0 00-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 016 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0012 .3z"/></svg></a><a href="https://discord.gg/WRvjXndt" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" class="f"><path d="M20.3 4.4a19.8 19.8 0 00-4.9-1.5l-.6 1.2a18.3 18.3 0 00-5.5 0L8.7 2.9A19.7 19.7 0 003.8 4.4C.5 9.3-.3 14.1.1 18.8a19.9 19.9 0 006 3 14.9 14.9 0 001.3-2.1 12.9 12.9 0 01-2-1l.5-.4a14.2 14.2 0 0012.2 0l.5.4c-.6.4-1.3.7-2 1 .4.7.8 1.4 1.3 2.1a19.8 19.8 0 006-3c.5-5.4-.8-10.1-3.6-14.4zM8 15.9c-1.2 0-2.2-1.1-2.2-2.4S6.8 11 8 11s2.2 1.1 2.2 2.5S9.200 15.900 8 15.900zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.5 2.2-2.5 2.200 1.100 2.200 2.500-1 2.400-2.200 2.400z"/></svg></a><a href="https://instagram.com/abu_bokkor_siddiki" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.2 6.8h.01"/></svg></a>';
@@ -409,14 +419,15 @@ else if(!DB.novels.length)M='<div class="empty">No novels yet</div>';
 else{M='<div id="hl" class="'+(S.view==="grid"?"grid":"ll")+'"></div>'+sen(S.view==="grid"?"grid":"list");post=function(){homeStart(Math.max(24,want));};}}
 else if(p[0]==="history"){H=hd("","History");var fl=DB.novels.filter(function(x){return x.fav;});fl.sort(function(x,y){return _c.compare(x.title,y.title);});var rl=recent();M='<div class="lab">Favorites</div>'+(fl.length?'<div class="ll">'+fl.map(function(x){return lrow(x);}).join("")+'</div>':'<p class="hint">Tap the star on a novel to keep it here.</p>')+'<div class="lab" style="margin-top:24px">Recently modified</div>'+(rl.length?'<div class="ll">'+rl.map(function(x){return lrow(x,"Edited "+ago(x.mod));}).join("")+'</div>':'<p class="hint">Novels you edit will appear here.</p>');post=function(){loadCovers($("#mn"));};}
 else if(p[0]==="settings"){var s=p[1];
-if(!s){H=hd("","Settings");M='<div class="card">'+row('data-a="go" data-v="settings/theme"',"theme","Theme",TH[S.theme],CH)+row('data-a="go" data-v="settings/design"',"design","Design style","Background: "+BG_TYPES.filter(function(t){return t[0]===S.bg.type;})[0][1],CH)+row('data-a="go" data-v="settings/general"',"list","General","Export and import",CH)+row('data-a="go" data-v="settings/about"',"info","About","Version 1.1.4",CH)+'</div>';}
+if(!s){H=hd("","Settings");M='<div class="card">'+row('data-a="go" data-v="settings/theme"',"theme","Theme",TH[S.theme],CH)+row('data-a="go" data-v="settings/design"',"design","Design style","Background: "+BG_TYPES.filter(function(t){return t[0]===S.bg.type;})[0][1],CH)+row('data-a="go" data-v="settings/general"',"list","General","Export and import",CH)+row('data-a="go" data-v="settings/about"',"info","About","Version 1.1.6",CH)+'</div>';}
 else if(s==="theme"){H=hd(bk("settings"),"Theme");var th={dark:["moon","The default look"],light:["sun","Bright background"],amoled:["circle","Pure black. Saves battery on OLED screens"]};
 M='<div class="card">'+Object.keys(th).map(function(k){return row('role="radio" data-a="s" data-k="theme" data-v="'+k+'" aria-checked="'+(S.theme===k)+'"',th[k][0],TH[k],th[k][1],CK);}).join("")+'</div>';}
 else if(s==="design"){H=hd(bk("settings"),"Design style");M='<div class="lab">Background</div><div class="card">'+BG_TYPES.map(function(t){var cu=S.bg.type===t[0];return '<div class="bgopt">'+row('role="radio" data-a="bgt" data-t="'+t[0]+'" aria-checked="'+cu+'"',t[2],t[1],"",CK)+(cu?bgCtl(t[0]):"")+'</div>';}).join("")+'</div>';}
-else if(s==="general"){H=hd(bk("settings"),"General");M='<div class="card">'+row('data-a="go" data-v="settings/io"',"swap","Export and import","Import backups from other apps",CH)+row('data-a="go" data-v="settings/auto"',"hist","Automatic backup",({off:"Off",weekly:"Every week",monthly:"Every month",quarterly:"Every 3 months"})[S.auto.f],CH)+'</div>';}
-else if(s==="auto"){H=hd(bk("settings/general"),"Automatic backup");var A=S.auto;M='<div class="card">'+[["off","Off"],["weekly","Every week"],["monthly","Every month"],["quarterly","Every 3 months"]].map(function(o){return row('role="radio" data-a="autof" data-v="'+o[0]+'" aria-checked="'+(A.f===o[0])+'"',"hist",o[1],"",CK);}).join("")+'</div><div class="lab" style="margin-top:22px">Folder</div><div class="card">'+row('data-a="autofolder"',"swap","Backup folder",A.fd||"Not selected",CH)+row('data-a="autonow"',"list","Back up now",A.last?"Last backup: "+new Date(A.last).toLocaleString():"No backup yet",CH)+'</div><p class="hint">Backups run when the app opens or comes back to the screen and a backup is due.</p>';}
+else if(s==="general"){H=hd(bk("settings"),"General");M='<div class="card">'+row('data-a="go" data-v="settings/io"',"swap","Export and import","Import backups from other apps",CH)+row('data-a="go" data-v="settings/pages"',"home","Page settings",STARTL(),CH)+row('data-a="go" data-v="settings/auto"',"hist","Automatic backup",({off:"Off",weekly:"Every week",monthly:"Every month",quarterly:"Every 3 months"})[S.auto.f],CH)+'</div>';}
+else if(s==="pages"){H=hd(bk("settings/general"),"Page settings");var T=S.start;M='<div class="lab">Open this page when the app starts</div><div class="card">'+[["last","clock","Last screen","Return to where you were"],["home","home","Home",""],["history","hist","History",""],["settings","set","Settings",""]].map(function(o){return row('role="radio" data-a="startt" data-v="'+o[0]+'" aria-checked="'+(T.t===o[0])+'"',o[1]==="clock"?"hist":o[1],o[2],o[3],CK);}).join("")+row('role="radio" data-a="startt" data-v="novel" aria-checked="'+(T.t==="novel")+'"',"design","Specific novel",T.t==="novel"&&find(T.id)?esc(find(T.id).title):"Choose a novel",CK)+'</div>';}
+else if(s==="auto"){H=hd(bk("settings/general"),"Automatic backup");var A=S.auto;M='<div class="card">'+[["off","Off"],["weekly","Every week"],["monthly","Every month"],["quarterly","Every 3 months"]].map(function(o){return row('role="radio" data-a="autof" data-v="'+o[0]+'" aria-checked="'+(A.f===o[0])+'"',"hist",o[1],"",CK);}).join("")+'</div><div class="lab" style="margin-top:22px">Folder</div><div class="card">'+row('data-a="autofolder"',"swap","Backup folder",A.fd||"Not selected",CH)+row('data-a="autocfg"',"list","Backup options",(A.ws?"Novels and app data":"Novels only")+" · "+({ntdb:"Default format",nov:".nov",txt:".txt"})[A.fmt],CH)+row('data-a="autonow"',"list","Back up now",A.last?"Last backup: "+new Date(A.last).toLocaleString():"No backup yet",CH)+'</div><p class="hint">Backups run when the app opens or comes back to the screen and a backup is due.</p>';}
 else if(s==="io"){H=hd(bk("settings/general"),"Export and import");M='<div class="card">'+row('data-a="impick"',"swap","Import backup","From other apps (.nov)",CH)+row('data-a="export"',"list","Export","Save a zip backup",CH)+'</div>';}
-else{H=hd(bk("settings"),"About");M='<div class="card about"><h2>Novel Tracker DB</h2><p>Keep the novels you read and the details that matter.</p><p class="v">Version 1.1.4</p><div class="dev"><small>About the developer</small><span>Made by Abu Bokker (axon469)</span><div class="soc">'+SOC+'</div></div></div>';}}
+else{H=hd(bk("settings"),"About");M='<div class="card about"><h2>Novel Tracker DB</h2><p>Keep the novels you read and the details that matter.</p><p class="v">Version 1.1.6</p><div class="dev"><small>About the developer</small><span>Made by Abu Bokker (axon469)</span><div class="soc">'+SOC+'</div></div></div>';}}
 else if(p[0]==="n"){
 if(!n){H=hd(bk(),"","","",1);M=skelGrid("list");skel=1;}
 else if(!n.hyd){H=hd(bk(),esc(n.title),"","",1);M=skelGrid("list");skel=1;hydrate(n).then(function(){if(curId()===n.id)render();},function(){toast("Could not open this novel");});}
@@ -425,12 +436,12 @@ if(p[2]==="i"){var fi=null;n.cats.forEach(function(x){x.items.forEach(function(y
 if(!fi){location.replace("#n/"+n.id);return;}
 H=hd(bk(),'<span id="ht">'+(esc(fi.title)||"New item")+'</span>',"",'<button class="ib mo" data-a="imenu" aria-label="More">'+ic("more")+'</button>',1);
 M='<div class="fld"><label>Title</label><input class="in" id="it" value="'+esc(fi.title)+'"></div><div class="fld"><label>Synopsis</label><textarea class="in" id="is">'+esc(fi.note)+'</textarea></div>';}
-else{var vi=n.vers?Math.max(0,n.vers.findIndex(function(x){return x.id===n.vc;}))+1:1;H=hd(bk(),esc(n.title),"",'<button class="vchip" data-a="vchip" aria-label="Versions">'+ic("layers")+'<span>V'+vi+'</span></button><button class="ib mo" data-a="menu" data-id="'+n.id+'" aria-label="More">'+ic("more")+'</button>',1)+(c?'<div class="tabs">'+n.cats.map(function(x){return '<button class="tg'+(x===c?" on":"")+'"'+(x.color?' style="--cc:'+x.color+'"':'')+' data-a="tab" data-id="'+x.id+'">'+esc(x.name)+'</button>';}).join("")+'<button class="tg" data-a="addcat" aria-label="Add category">'+ic("plus")+'</button></div>':"");
+else{var vi=n.vers?vnum(n.vers.filter(function(x){return x.id===n.vc;})[0]||n.vers[0],Math.max(0,n.vers.findIndex(function(x){return x.id===n.vc;}))):vnum({k:DB.vdk},0);H=hd(bk(),esc(n.title),"",'<button class="vchip" data-a="vchip" aria-label="Versions">'+ic("layers")+'<span>V'+vi+'</span></button><button class="ib mo" data-a="menu" data-id="'+n.id+'" aria-label="More">'+ic("more")+'</button>',1)+(c?'<div class="tabs">'+n.cats.map(function(x){return '<button class="tg'+(x===c?" on":"")+'"'+(x.color?' style="--cc:'+x.color+'"':'')+' data-a="tab" data-id="'+x.id+'">'+esc(x.name)+'</button>';}).join("")+'<button class="tg" data-a="addcat" aria-label="Add category">'+ic("plus")+'</button></div>':"");
 if(c){M=(searching?'<input class="in" id="q" placeholder="Search" value="'+esc(q)+'" style="margin:0 0 12px">':'')+'<div id="lst"></div>'+sen("items");F='<button class="fab" data-a="additem">'+ic("plus")+'Add item</button>';post=function(){fillItems(n,c,Math.max(40,want));};}
 else{M='<div class="empty">No categories yet</div>';F='<button class="fab" data-a="addcat">'+ic("plus")+'Add category</button>';}}}}
 else{location.replace("#home");return;}
 $("#hd").innerHTML=H;$("#mn").innerHTML=M;$("#fab").innerHTML=F;$("#nav").style.display=nav?"flex":"none";
-$("#t-home").innerHTML=ic("home")+"Home";$("#t-history").innerHTML=ic("hist")+"History";$("#t-search").innerHTML=ic("search")+"Search";$("#t-settings").innerHTML=ic("set")+"Settings";$("#add").innerHTML=ic("plus");
+
 $("#t-home").classList.toggle("on",(p[0]==="home"&&!hs.on)||h==="add");$("#t-search").classList.toggle("on",p[0]==="home"&&hs.on&&h!=="add");$("#t-history").classList.toggle("on",p[0]==="history");$("#t-settings").classList.toggle("on",p[0]==="settings");
 var f=$("#full");f.classList.toggle("on",h==="add");
 f.innerHTML=h==="add"?'<div><h2>Add novel</h2><input class="in" id="nt" placeholder="Title"><input class="in" id="no" placeholder="Original title"><div class="card" style="margin-top:12px"><div class="th">Template</div>'+tplRows()+'</div>'+tagHtml()+'<div class="bt"><button class="b2" data-a="back">Cancel</button><button class="b1" data-a="savenv">Save</button></div></div>':"";
@@ -440,8 +451,8 @@ mn0.scrollTop=(sk===curR)?prevST:(sv0.st||0);curR=sk;var ta=$("#is");if(ta)fit(t
 function ensureVers(n){if(!n.vers){n.vers=[{id:uid(),k:DB.vdk,cats:n.cats,sel:n.sel}];n.vc=n.vers[0].id;}}
 function vname(v){return DB.vnm[v.k]||v.k||"Version";}
 function kOf(name){var ks=Object.keys(DB.vnm);for(var i=0;i<ks.length;i++)if(DB.vnm[ks[i]]===name)return ks[i];var k=uid();DB.vnm[k]=name;svM();return k;}
-function verDlg(n){ensureVers(n);mid=n.id;var d=$("#dlg");d.className="on sheet";
-d.innerHTML='<div class="bx" data-out="1"><h2>Versions</h2><p class="mt">'+n.vers.length+(n.vers.length>1?" versions":" version")+' · tap one to open it</p>'+n.vers.map(function(v,i){var it=0,cs=v.id===n.vc?n.cats:v.cats;cs.forEach(function(c){it+=c.items.length;});return '<div class="vrow'+(v.id===n.vc?" on":"")+'" data-a="vsel" data-id="'+v.id+'"><span class="vb">V'+(i+1)+'</span><span class="txt"><b>'+esc(vname(v))+(i===n.vers.length-1&&n.vers.length>1?'<i class="vl">LATEST</i>':'')+'</b><small>'+cs.length+' categories · '+it+' items</small></span><button class="ib" data-a="vren" data-id="'+v.id+'" aria-label="Rename">'+ic("edit")+'</button></div>';}).join("")+'<div class="bt"><button class="b1" data-a="x">Close</button></div></div>';}
+function verDlg(n){ensureVers(n);mid=n.id;var d=$("#dlg"),li=vlatest(n);d.className="on sheet";
+d.innerHTML='<div class="bx" data-out="1"><h2>Versions</h2><p class="mt">'+n.vers.length+(n.vers.length>1?" versions":" version")+' · tap one to open it</p>'+n.vers.map(function(v,i){var it=0,cs=v.id===n.vc?n.cats:v.cats;cs.forEach(function(c){it+=c.items.length;});return '<div class="vrow'+(v.id===n.vc?" on":"")+'" data-a="vsel" data-id="'+v.id+'"><span class="vb">V'+vnum(v,i)+'</span><span class="txt"><b>'+esc(vname(v))+(i===li&&n.vers.length>1?'<i class="vl">LATEST</i>':'')+'</b><small>'+cs.length+' categories · '+it+' items</small></span><button class="ib" data-a="vren" data-id="'+v.id+'" aria-label="Rename">'+ic("edit")+'</button></div>';}).join("")+'<div class="bt"><button class="b1" data-a="x">Close</button></div></div>';}
 function switchVer(n,id){syncCur(n);var v=n.vers.filter(function(x){return x.id===id;})[0];if(!v)return;n.vc=id;n.cats=v.cats;n.sel=v.sel||"";sv(n);render();verDlg(n);}
 function sw(c){return swRow(c)+'<div class="cpw" id="cpw" style="display:none"></div>';}
 function swRow(c){var cu=c&&COLS.indexOf(c)<0;return '<div class="sws" id="sws">'+COLS.map(function(x){return '<button class="swb'+(x===c?" on":"")+'" data-a="sw" data-v="'+x+'" style="background:'+(x||"var(--text)")+'" aria-label="Color"></button>';}).join("")+(cu?'<button class="swb on" data-a="sw" data-v="'+c+'" style="background:'+c+'" aria-label="Color"></button>':'')+'<button class="swb cust" data-a="cpk" aria-label="Custom color"></button></div>';}
@@ -453,20 +464,41 @@ function cpPt(e){var R=$("#cpr").getBoundingClientRect(),dx=e.clientX-R.left-75,
 document.addEventListener("pointerdown",function(e){var R=e.target.closest&&e.target.closest("#cpr");if(!R)return;var b=R.getBoundingClientRect(),dx=e.clientX-b.left-75,dy=e.clientY-b.top-75;cpm=Math.sqrt(dx*dx+dy*dy)>52?"h":"sv";try{R.setPointerCapture(e.pointerId);}catch(x){}cpPt(e);e.preventDefault();});
 document.addEventListener("pointermove",function(e){if(cpm&&e.buttons)cpPt(e);});
 document.addEventListener("pointerup",function(){cpm="";});
-function loadFull(e){return Promise.all([e.hyd?null:rq(tx(["novels"]).objectStore("novels").get(e.id)),rq(tx(["covers"]).objectStore("covers").get(e.id))]).then(function(r){var cats;if(e.hyd){syncCur(e);cats=e.cats;}else{var d=r[0]||{};cats=d.cats||[];if(d.vers){var v=d.vers.filter(function(x){return x.id===d.vc;})[0]||d.vers[0];cats=v.cats||[];}}
-var o={id:e.id,title:e.title,orig:e.orig,tag:e.tag,cats:cats,cover:""};var cb=r[1]&&r[1].b;return cb?b2d(cb).then(function(u){o.cover=u;return o;}):o;});}
-function buildZip(ids,ws,ff,prog){var L=ids.map(find).filter(Boolean),F=[],used={},i=0;return new Promise(function(res){
+function loadFull(e){return Promise.all([e.hyd?null:rq(tx(["novels"]).objectStore("novels").get(e.id)),rq(tx(["covers"]).objectStore("covers").get(e.id))]).then(function(r){var d=e.hyd?(syncCur(e),{cats:e.cats,vers:e.vers,vc:e.vc,tpl:e.tpl}):(r[0]||{}),cats=d.cats||[],vl=null,vcur=0;
+if(d.vers){vl=d.vers.map(function(v){return {name:vname(v),cats:v.cats||[]};});vcur=Math.max(0,d.vers.findIndex(function(x){return x.id===d.vc;}));cats=(d.vers[vcur]||d.vers[0]).cats||[];}
+var o={id:e.id,title:e.title,orig:e.orig,tag:e.tag,fav:e.fav,created:e.created,mod:e.mod,tpl:d.tpl||"empty",cats:cats,vl:vl,vcur:vcur,cover:""};var cb=r[1]&&r[1].b;return cb?b2d(cb).then(function(u){o.cover=u;return o;}):o;});}
+function conv(n,ff){var cv=n.cover||"";
+if(ff==="ntdb"){var tg=DB.tags.filter(function(t){return t.id===n.tag;})[0];return JSON.stringify({app:"novel-tracker-db",version:2,title:n.title,orig:n.orig,cover:cv,tag:tg?tg.name:"Normal",fav:n.fav?1:0,created:n.created||0,mod:n.mod||0,tpl:n.tpl||"empty",cats:n.cats.map(function(c){return {name:c.name,color:c.color||"",items:c.items.map(function(i){return {title:i.title,note:i.note};})};}),versions:n.vl?n.vl.map(function(v){return {name:v.name,cats:v.cats.map(function(c){return {name:c.name,color:c.color||"",items:c.items.map(function(i){return {title:i.title,note:i.note};})};})};}):undefined,current:n.vl?n.vcur:undefined});}
+var now=Date.now();return JSON.stringify({version:5,code:n.id.slice(0,8),title:n.title,description:n.orig,last_update_date:now,last_backup_date:now,cover:cv.replace(/^data:image\/\w+;base64,/,""),categories:n.cats.map(function(c,ci){return {code:c.id.slice(0,8),title:c.name,color:c.color?(0xFF000000|parseInt(c.color.slice(1),16))>>>0:4293467747,ranking:ci+1,items:c.items.map(function(i,ii){return {code:(i.id||"").slice(0,8),title:i.title,synopsis:i.note,ranking:ii+1,status:"1"};})};}),statuses:[{code:"1",title:"Todo",color:-2697255,ranking:1}],books:[]});}
+function exDlg(){if(!DB.novels.length){toast("No novels to export");return;}exSel={};var d=$("#dlg");d.className="on sheet";
+d.innerHTML='<div class="bx"><h2>Export</h2><p class="mt">Which novels do you want to export?</p><label class="sr">All novels<input type="checkbox" class="cb" id="ea" checked></label><div id="el" style="display:none"><input class="in" id="es" placeholder="Search novels" style="margin:0 0 6px"><div class="lst" id="exl"></div></div><label class="sr">Include app data and settings<input type="checkbox" class="cb" id="eset"></label><p class="mt">File format</p>'+[["ntdb","Novel Tracker DB (default)"],["nov",".nov"],["txt",".txt"]].map(function(f,i){return '<label class="sr">'+f[1]+'<input type="checkbox" class="cb ef" value="'+f[0]+'"'+(i?'':' checked')+'></label>';}).join("")+'<div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" data-a="exgo">Create backup</button></div></div>';}
+function exList(qs){var box=$("#exl");if(!box)return;var toks=(qs||"").toLowerCase().split(/\s+/).filter(Boolean),h="",c=0;
+for(var i=0;i<DB.novels.length&&c<80;i++){var x=DB.novels[i],s=x._s||(x._s=(x.title+" "+(x.orig||"")).toLowerCase()),ok=true;for(var j=0;j<toks.length;j++)if(s.indexOf(toks[j])<0){ok=false;break;}
+if(ok){c++;h+='<label class="sr">'+esc(x.title)+'<input type="checkbox" class="cb ex" value="'+x.id+'"'+(exSel[x.id]?" checked":"")+'></label>';}}
+box.innerHTML=h||'<p class="hint">No matches</p>';}
+function buildZip(ids,ws,ff,prog){var L=ids.map(find).filter(Boolean),F=[],used={},i=0,bad=0;return new Promise(function(res){
 function nx(){if(prog)prog(Math.max(1,Math.round(i/(L.length+1)*100)));
-if(i<L.length){var e=L[i++];loadFull(e).then(function(n){var b=safe(n.title),k=b,c=1;while(used[k])k=b+"_"+(++c);used[k]=1;F.push({name:"novels/"+k+(ff==="ntdb"?".ntdb":ff==="nov"?".nov":"_nov.txt"),data:conv(n,ff)});setTimeout(nx,0);},function(){setTimeout(nx,0);});return;}
-if(ws)F.push({name:"settings/app-settings.json",data:JSON.stringify({app:"novel-tracker-db",settings:S})});
-res({blob:zip(F),nm:"novel-tracker-db-backup-"+new Date().toISOString().slice(0,10)+".zip"});}
+if(i<L.length){var e=L[i++];loadFull(e).then(function(n){var b=safe(n.title),k=b,c=1;while(used[k])k=b+"_"+(++c);used[k]=1;F.push({name:"novels/"+k+(ff==="ntdb"?".ntdb":ff==="nov"?".nov":"_nov.txt"),data:conv(n,ff)});setTimeout(nx,0);},function(){bad++;setTimeout(nx,0);});return;}
+if(bad){res({err:bad});return;}
+if(ws)F.push({name:"settings/app-settings.json",data:JSON.stringify({app:"novel-tracker-db",settings:S,tags:DB.tags,tpls:DB.tpls,vnm:DB.vnm})});
+var dt=new Date().toISOString();F.unshift({name:"manifest.json",data:JSON.stringify({app:"novel-tracker-db",appVersion:"1.1.6",created:dt,novels:L.length,format:ff,includesAppData:!!ws})});
+res({blob:zip(F),nm:"novel-tracker-db-backup-"+dt.slice(0,10)+".zip"});}
 setTimeout(nx,30);});}
 function exRun(ids,ws,ff){var dir=null;
 function go(){var d=$("#dlg");d.className="on";d.innerHTML='<div class="bx"><h2>Creating backup</h2><div class="pb"><i id="pbi"></i></div><p class="mt" id="pp">1%</p></div>';
-buildZip(ids,ws,ff,function(p){$("#pbi").style.width=p+"%";$("#pp").textContent=p+"%";}).then(function(r){deliver(r.blob,r.nm,dir,function(ok){d.innerHTML='<div class="bx"><h2>'+(ok?"Backup created":"Could not save backup")+'</h2><p class="mt">'+r.nm+'</p><div class="bt"><button class="b2" data-a="exsave">Download</button><button class="b1" data-a="x">Done</button></div></div>';});});}
+buildZip(ids,ws,ff,function(p){$("#pbi").style.width=p+"%";$("#pp").textContent=p+"%";}).then(function(r){if(r.err){d.innerHTML='<div class="bx"><h2>Backup not created</h2><p class="mt">'+r.err+' novel(s) could not be read, so nothing was saved. Please try again.</p><div class="bt"><button class="b1" data-a="x">Close</button></div></div>';return;}
+deliver(r.blob,r.nm,dir,function(ok){d.innerHTML='<div class="bx"><h2>'+(ok?"Backup created":"Could not save backup")+'</h2><p class="mt">'+r.nm+'</p><div class="bt"><button class="b2" data-a="exsave">Download</button><button class="b1" data-a="x">Done</button></div></div>';},false);});}
 if(window.NTDB&&NTDB.pickFolder){ntdbCb=function(ok){if(ok)go();else toast("No folder selected");};NTDB.pickFolder();}
 else if(window.showDirectoryPicker){window.showDirectoryPicker().then(function(h){dir=h;go();},function(){toast("No folder selected");});}
 else go();}
+var lastZip=null;
+function deliver(blob,nm,dir,cb,auto){lastZip={b:blob,n:nm};
+if(window.NTDB&&(NTDB.beginSave||NTDB.save)){var bs=auto&&NTDB.beginAutoSave?"beginAutoSave":"beginSave";
+if(NTDB[bs]){var ok0=false;try{ok0=NTDB[bs](nm)!==false;}catch(e){}if(!ok0){cb(false);return;}var off=0,CH=3*262144;
+(function nx(){if(off>=blob.size){var f=false;try{f=NTDB.endSave()!==false;}catch(e){}cb(f);return;}var fr=new FileReader();fr.onload=function(){var okc=false;try{okc=NTDB.chunk(String(fr.result).split(",")[1])!==false;}catch(e){}if(!okc){try{NTDB.endSave();}catch(e){}cb(false);return;}off+=CH;setTimeout(nx,0);};fr.onerror=function(){cb(false);};fr.readAsDataURL(blob.slice(off,off+CH));})();return;}
+var r=new FileReader();r.onload=function(){try{cb(NTDB.save(nm,String(r.result).split(",")[1])!==false);}catch(e){cb(false);}};r.readAsDataURL(blob);return;}
+if(dir){blob.arrayBuffer().then(function(buf){return dir.getFileHandle(nm,{create:true}).then(function(h){return h.createWritable().then(function(w){return w.write(buf).then(function(){return w.close();});}).then(function(){return h.getFile();});});}).then(function(f){cb(f.size===blob.size);},function(){cb(false);});return;}
+dl(blob,nm);cb(true);}
 function searchBar(){var na=advCount();return '<div class="sb"><label class="si">'+ic("search")+'<input id="hs" placeholder="Title or original title" value="'+esc(hs.q)+'" enterkeyhint="search"><span class="rc2" id="rc2"></span></label><button class="adv'+(na?" on":"")+'" data-a="adv">Advanced'+(na?" · "+na:"")+ic("down")+'</button><button class="ib" data-a="srchx" aria-label="Close search">'+ic("x")+'</button></div>';}
 function advDlg(){var d=$("#dlg");d.className="on sheet";var ch=function(o,l){return '<span class="chip'+(hs.cop===o?" on":"")+'" data-a="cop" data-v="'+o+'">'+l+'</span>';};
 d.innerHTML='<div class="bx"><h2>Advanced search</h2><div class="arow"><span>MC name</span><input class="in" id="amc" placeholder="Main character" value="'+esc(hs.mc)+'"></div><div class="arow"><span>Rating</span><input class="in" id="ar1" inputmode="decimal" placeholder="from" value="'+(hs.rmin==null?"":hs.rmin)+'"><i>–</i><input class="in" id="ar2" inputmode="decimal" placeholder="to" value="'+(hs.rmax==null?"":hs.rmax)+'"></div><div class="arow"><span>Chapter</span><div class="chips" id="cops" style="margin:0">'+ch("=","=")+ch(">",">")+ch("<","<")+ch("r","Range")+'</div></div><div class="arow"><span></span><input class="in" id="ac1" inputmode="numeric" placeholder="'+(hs.cop==="r"?"from":"number")+'" value="'+(hs.c1==null?"":hs.c1)+'"><input class="in" id="ac2" inputmode="numeric" placeholder="to" value="'+(hs.c2==null?"":hs.c2)+'" style="'+(hs.cop==="r"?"":"display:none")+'"></div><p class="hint" style="margin:10px 2px 0">Chapter means the last chapter you read.</p><div class="bt"><button class="b2" data-a="advreset">Reset</button><button class="b1" data-a="advgo">Apply</button></div></div>';}
@@ -477,30 +509,43 @@ var fin=function(){d.classList.remove("on");render();};
 if(!need){fin();return;}
 d.className="on";d.innerHTML='<div class="bx"><h2>Preparing search</h2><div class="pb"><i id="pbi"></i></div><p class="mt" id="pp">One-time setup for your library…</p></div>';
 backfill(function(p){$("#pbi").style.width=Math.max(2,p)+"%";}).then(fin,function(){toast("Could not prepare search");fin();});}
-function pickAuto(){var A=S.auto;
-if(window.NTDB&&NTDB.pickFolder){ntdbCb=function(ok){if(ok){A.fd="Selected folder";A.nat=1;svS();render();autoCheck();}};NTDB.pickFolder();}
-else if(window.showDirectoryPicker){window.showDirectoryPicker({mode:"readwrite"}).then(function(h){autoDir=h;A.fd=h.name||"Selected folder";A.nat=0;svS();metaPut("autodir",h).catch(function(){});render();autoCheck();},function(){});}
-else{A.fd="Downloads";A.nat=0;autoDir=null;svS();render();toast("Backups will be saved to Downloads");autoCheck();}}
+function pickAuto(){var A=S.auto,pf=window.NTDB&&(NTDB.pickAutoFolder||NTDB.pickFolder);
+if(pf){ntdbCb=function(ok){if(!ok){toast("No folder selected");return;}A.fd=autoName()||"Selected folder";A.nat=1;svS();if(!A.cfg)autoCfg();else{render();autoCheck();}};(NTDB.pickAutoFolder?NTDB.pickAutoFolder():NTDB.pickFolder());}
+else if(window.showDirectoryPicker){window.showDirectoryPicker({mode:"readwrite"}).then(function(h){autoDir=h;A.fd=h.name||"Selected folder";A.nat=0;svS();metaPut("autodir",h).catch(function(){});if(!A.cfg)autoCfg();else{render();autoCheck();}},function(){});}
+else{A.fd="Downloads";A.nat=0;autoDir=null;svS();toast("Backups will be saved to Downloads");if(!A.cfg)autoCfg();else{render();autoCheck();}}}
+function autoName(){try{var f=window.NTDB&&(NTDB.autoFolderName||NTDB.folderName);return f?String(f.call(NTDB)||""):"";}catch(e){return "";}}
+function autoCfg(){var A=S.auto,d=$("#dlg");d.className="on sheet";
+d.innerHTML='<div class="bx"><h2>Backup options</h2><p class="mt">Data to include</p><label class="sr">Novel data (required)<input type="checkbox" class="cb" checked disabled></label><label class="sr">App data and settings<input type="checkbox" class="cb" id="cws"'+(A.ws?" checked":"")+'></label><p class="mt">Novel file format</p>'+[["ntdb","Default app format (recommended)"],["nov",".nov"],["txt",".txt"]].map(function(f){return '<label class="sr">'+f[1]+'<input type="checkbox" class="cb ef" value="'+f[0]+'"'+(A.fmt===f[0]?" checked":"")+'></label>';}).join("")+'<div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" data-a="autosave">Save</button></div></div>';}
+function snList(){var box=$("#snl");if(!box)return;var toks=($("#sn").value||"").toLowerCase().split(/\s+/).filter(Boolean),h="",c=0,a=sorted();
+for(var i=0;i<a.length&&c<30;i++){var x=a[i],s=x._s||(x._s=(x.title+" "+(x.orig||"")).toLowerCase()),ok=true;for(var j=0;j<toks.length;j++)if(s.indexOf(toks[j])<0){ok=false;break;}
+if(ok){c++;h+='<div class="row snr'+(x.id===snSel?" on":"")+'" data-a="snsel" data-id="'+x.id+'"><span class="rd"></span><span class="txt"><b>'+esc(x.title)+'</b>'+(x.orig?'<small>'+esc(x.orig)+'</small>':'')+'</span><span class="chip">Add</span></div>';}}
+box.innerHTML=h||'<p class="hint">No novels found</p>';$("#snok").disabled=!snSel;}
+function startDlg(){snSel=S.start.t==="novel"&&find(S.start.id)?S.start.id:"";var d=$("#dlg");d.className="on sheet";d.innerHTML='<div class="bx"><h2>Specific novel</h2><input class="in" id="sn" placeholder="Search by title or original title" style="margin-top:8px"><div class="lst" id="snl" style="margin-top:8px"></div><div class="bt"><button class="b2" data-a="x">Cancel</button><button class="b1" id="snok" data-a="snok">Add this novel</button></div></div>';snList();}
 var AUTO_MS={weekly:7*864e5,monthly:30*864e5,quarterly:91*864e5};
-function autoDue(){var A=S.auto;return A.f!=="off"&&!!A.fd&&Date.now()-(A.last||0)>=AUTO_MS[A.f];}
+function autoDue(){var A=S.auto;return A.f!=="off"&&!!A.fd&&!!A.cfg&&Date.now()-(A.last||0)>=AUTO_MS[A.f];}
 function autoCheck(){if(booting||autoBusy||!autoDue())return;autoRun(false);}
 function autoRun(manual){var A=S.auto;if(autoBusy)return;if(!A.fd){if(manual)toast("Choose a folder first");return;}
-var run=function(){autoBusy=true;toast("Backing up…");buildZip(DB.novels.map(function(x){return x.id;}),!!A.ws,A.fmt).then(function(r){deliver(r.blob,r.nm.replace("backup","auto"),A.nat?null:autoDir,function(ok){autoBusy=false;if(ok){A.last=Date.now();svS();toast("Backup saved");if(location.hash.indexOf("settings/auto")>-1)render();}else toast("Automatic backup failed");});});};
+if(A.nat&&window.NTDB&&(NTDB.autoFolderName||NTDB.folderName)&&!autoName()){A.fd="";svS();if(location.hash.indexOf("settings/auto")>-1)render();toast("Backup folder is no longer available. Choose a folder again.");return;}
+var run=function(){autoBusy=true;toast("Backing up…");buildZip(DB.novels.map(function(x){return x.id;}),!!A.ws,A.fmt).then(function(r){if(r.err){autoBusy=false;toast("Backup stopped: "+r.err+" novel(s) could not be read");return;}deliver(r.blob,r.nm.replace("backup","auto"),A.nat?null:autoDir,function(ok){autoBusy=false;if(ok){A.last=Date.now();svS();toast("Backup saved");if(location.hash.indexOf("settings/auto")>-1)render();}else toast("Automatic backup failed. Check the backup folder.");},true);});};
 if(!A.nat&&autoDir&&autoDir.queryPermission){autoDir.queryPermission({mode:"readwrite"}).then(function(p){if(p==="granted")run();else{autoWait=true;toast("Tap anywhere to allow the backup");}});}else run();}
 window.ntdbFolder=function(ok){var f=ntdbCb;ntdbCb=null;if(f)f(ok);};
-function runImp(T,ver,vn){var tot=0,done=0,i=0,mt=0,t0=Date.now(),d=$("#dlg"),idx={},kv=ver?kOf(vn):"";
+function runImp(T,ver,vn){var tot=0,done=0,i=0,mt=0,t0=Date.now(),d=$("#dlg"),idx={},kv=ver?kOf(vn):"",pc=1,sm=null,smAt=0,shown=null,tm=0;
 T.forEach(function(n){tot+=1+n.cats.reduce(function(a,c){return a+c.items.length;},0);});
 if(ver)DB.novels.forEach(function(m){[m.title,m.orig].forEach(function(s){var k=kk(s);if(k)idx[k]=m;});});
 d.className="on";d.innerHTML='<div class="bx"><h2>Importing</h2><div class="pb"><i id="pbi"></i></div><p class="mt" id="pp">1%</p></div>';
-function up(){var p=Math.max(1,Math.min(100,Math.round(done/tot*100))),l=p>5&&p<100?Math.ceil((Date.now()-t0)/1000/p*(100-p)):0;$("#pbi").style.width=p+"%";$("#pp").textContent=p+"%"+(l?" · about "+l+" s left":"");}
-function nxt(){if(i>=T.length){flush().then(function(){reindex();d.innerHTML='<div class="bx"><h2>Import complete</h2><p class="mt">'+(T.length-mt)+' added to the homepage'+(mt?' · '+mt+' added as versions':'')+'</p><div class="bt"><button class="b1" data-a="idone">Done</button></div></div>';});return;}
+function lab(){var el=$("#pp");if(el)el.textContent=pc+"%"+(shown!=null?" · about "+fmtDur(shown)+" left":"");}
+function up(){pc=Math.max(1,Math.min(100,Math.round(done/tot*100)));var b=$("#pbi");if(b)b.style.width=pc+"%";if(pc>3&&pc<100){var now=Date.now(),est=(now-t0)/1000/pc*(100-pc);sm=sm==null?est:sm*0.85+est*0.15;smAt=now;}lab();}
+tm=setInterval(function(){if(!$("#pp")){clearInterval(tm);return;}if(sm==null)return;var rem=Math.round(Math.max(0,sm-(Date.now()-smAt)/1000));shown=shown==null?rem:(rem>shown+3?rem:Math.max(0,Math.min(shown-1,rem)));lab();},1000);
+function nxt(){if(i>=T.length){clearInterval(tm);flush().then(function(){reindex();pend=[];d.innerHTML='<div class="bx"><h2>Import complete</h2><p class="mt">'+(T.length-mt)+' added to the homepage'+(mt?' · '+mt+' added as versions':'')+'</p><div class="bt"><button class="b1" data-a="idone">Done</button></div></div>';});return;}
 var n=T[i++],its=[],pos=0;n.cats.forEach(function(c){c.items.forEach(function(x){its.push(x);});});
 (function ch(){var m=Math.min(40,its.length-pos);pos+=m;done+=m;up();if(pos<its.length){setTimeout(ch,0);return;}
 var rc=n.rc;delete n.rc;(rc?function(cb){shrink("data:image/jpeg;base64,"+rc,420,cb);}:function(cb){cb("");})(function(cv){done++;var now=Date.now();
 if(n.tag==="adult"&&!DB.tags.some(function(t){return t.id==="adult";})){DB.tags.push({id:"adult",name:"Adult"});svM();}
 var m2=ver&&(idx[kk(n.title)]||(n.orig&&idx[kk(n.orig)]));
 if(m2){hydrate(m2).then(function(){ensureVers(m2);syncCur(m2);var ex=m2.vers.filter(function(x){return x.k===kv;})[0],tv=ex;if(ex)ex.cats=n.cats;else{tv={id:uid(),k:kv,cats:n.cats,sel:""};m2.vers.push(tv);}m2.vc=tv.id;m2.cats=tv.cats;m2.sel=tv.sel||"";if(n.tag==="adult")m2.tag="adult";m2.mod=now;mt++;return (!m2.hc&&cv)?putCover(m2.id,cv).then(function(){m2.hc=1;}):null;}).then(function(){sv(m2);return flush();}).then(function(){up();setTimeout(nxt,0);},function(){saveErr();setTimeout(nxt,0);});}
-else{var e={id:uid(),title:n.title,orig:n.orig,tag:n.tag,created:now,mod:now,hc:cv?1:0},dt={id:e.id,tpl:"empty",sel:"",cats:n.cats};if(ver){var vid=uid();dt.vers=[{id:vid,k:kv,cats:n.cats,sel:""}];dt.vc=vid;delete dt.cats;}
+else{var tg=n.tag==="adult"?"adult":(n.tagName?tagByName(n.tagName):n.tag),e={id:uid(),title:n.title,orig:n.orig,tag:tg,created:n.cr||now,mod:n.md||now,hc:cv?1:0,fav:n.fav?1:0},dt={id:e.id,tpl:n.tplName||"empty",sel:"",cats:n.cats};
+if(ver){var vid=uid();dt.vers=[{id:vid,k:kv,cats:n.cats,sel:""}];dt.vc=vid;delete dt.cats;}
+else if(n.vlist&&n.vlist.length){dt.vers=n.vlist.map(function(v){return {id:uid(),k:kOf(v.name),cats:v.cats,sel:""};});var vi=Math.max(0,Math.min(n.vcur||0,dt.vers.length-1));dt.vc=dt.vers[vi].id;dt.vers[vi].cats=n.cats;delete dt.cats;}
 Object.assign(e,deriveAdv(n.cats));e.av=1;writeNew(e,dt,cv).then(function(){DB.novels.unshift(e);IDX[e.id]=e;up();setTimeout(nxt,0);},function(){saveErr();setTimeout(nxt,0);});}});})();}
 nxt();}
 
@@ -522,7 +567,7 @@ else if(a==="sw"){pcol=el.dataset.v;[].forEach.call(document.querySelectorAll(".
 else if(a==="cpk"){var w=$("#cpw");if(w.style.display!=="none"){w.style.display="none";return;}cpS=hex2hsv(pcol&&pcol.charAt(0)==="#"?pcol:"#d4a28a");w.innerHTML='<div class="cph"><span class="cpv" id="cpv"></span><b id="cpt"></b><button class="cpok" data-a="cpok" aria-label="Apply color">'+ic("check")+'</button></div><div class="cpr" id="cpr"><div class="cpring"></div><div class="cpq"></div><i class="cpn" id="cpn1"></i><i class="cpn" id="cpn2"></i></div>';w.style.display="block";cpUp();}
 else if(a==="cpok"){pcol=hsv2hex(cpS.h,cpS.s,cpS.v);$("#sws").outerHTML=swRow(pcol);$("#cpw").style.display="none";}
 else if(a==="export")exDlg();
-else if(a==="exgo"){var ids=$("#ea").checked?DB.novels.map(function(x){return x.id;}):[].map.call(document.querySelectorAll(".ex:checked"),function(c){return c.value;}),ws=$("#eset").checked,ff=document.querySelector(".ef:checked").value;if(!ids.length&&!ws){toast("Select at least one novel");return;}$("#dlg").classList.remove("on");exRun(ids,ws,ff);}
+else if(a==="exgo"){var ids=$("#ea").checked?DB.novels.map(function(x){return x.id;}):Object.keys(exSel),ws=$("#eset").checked,ff=document.querySelector(".ef:checked").value;if(!ids.length&&!ws){toast("Select at least one novel");return;}$("#dlg").classList.remove("on");exRun(ids,ws,ff);}
 else if(a==="tsave"){if(!n)return;var tn=$("#f0").value.trim();if(!tn){toast("Enter a name");return;}var i2=$("#t2").checked,c1=$("#t1").checked||i2;DB.tpls.push({id:uid(),name:tn,cats:c1?n.cats.map(function(c){return {name:c.name,color:c.color||"",items:i2?c.items.map(function(x){return {title:x.title,note:x.note};}):[]};}):[]});svM();$("#dlg").classList.remove("on");toast("Template saved");}
 else if(a==="tab"){if(!n)return;if(cur(n).id===id){var c=cur(n);pcol=c.color||"";ask("Rename category",[{ph:"Name",v:c.name}],function(v,w,cl){c.name=v;c.color=cl;sv(n);render();},"Save",null,sw(pcol));}else{$("main").scrollTop=0;n.sel=id;sv(n);q="";searching=false;render();}}
 else if(a==="additem"){if(!n)return;var ni={id:uid(),title:"",note:""};cur(n).items.push(ni);n.mod=Date.now();sv(n);location.hash="#n/"+n.id+"/i/"+ni.id;}
@@ -562,19 +607,26 @@ else if(a==="advgo")advGo();
 else if(a==="autof"){S.auto.f=el.dataset.v;if(S.auto.f!=="off"&&!S.auto.fd)toast("Now choose a folder");svS();render();autoCheck();}
 else if(a==="autofolder")pickAuto();
 else if(a==="autonow")autoRun(true);
+else if(a==="autocfg")autoCfg();
+else if(a==="autosave"){var ef=document.querySelector(".ef:checked");S.auto.fmt=ef?ef.value:"ntdb";S.auto.ws=$("#cws").checked?1:0;S.auto.cfg=1;svS();$("#dlg").classList.remove("on");toast("Backup options saved");render();autoCheck();}
+else if(a==="startt"){if(el.dataset.v==="novel")startDlg();else{S.start={t:el.dataset.v,id:""};svS();render();}}
+else if(a==="snsel"){snSel=id;[].forEach.call(document.querySelectorAll(".snr"),function(r){r.classList.toggle("on",r===el);});$("#snok").disabled=false;}
+else if(a==="snok"){if(!snSel)return;S.start={t:"novel",id:snSel};svS();$("#dlg").classList.remove("on");render();toast("Start page saved");}
 else if(a==="idone"){$("#dlg").classList.remove("on");location.hash="#home";render();}
 else if(a==="mx")$("#menu").classList.remove("on");
 else if(a==="search"){searching=!searching;q="";render();if(searching)$("#q").focus();}});
 
 document.addEventListener("input",function(e){var t=e.target;
-if(t.id==="es"){var qs=t.value.toLowerCase();[].forEach.call(document.querySelectorAll("#el label"),function(l){l.style.display=l.dataset.t.indexOf(qs)>-1?"":"none";});}
+if(t.id==="es"){exList(t.value);}
+else if(t.id==="sn"){clearTimeout(qT);qT=setTimeout(snList,120);}
 else if(t.id==="hs"){hs.q=t.value;clearTimeout(qT);qT=setTimeout(function(){var b=$("#hl");if(b){b.innerHTML="";homeStart(24);}},120);}
 else if(t.id==="q"){q=t.value;clearTimeout(qT);qT=setTimeout(function(){var nn=nvr();if(nn&&nn.hyd&&nn.cats.length){$("#lst").innerHTML="";fillItems(nn,cur(nn),40);}},130);}
 else if(t.id==="it"||t.id==="is"){var pp=location.hash.slice(1).split("/"),nn=nvr();if(nn&&nn.hyd)nn.cats.forEach(function(x){x.items.forEach(function(y){if(y.id===pp[3]){if(t.id==="it"){y.title=t.value;$("#ht").textContent=t.value||"New item";}else{y.note=t.value;fit(t);}nn.mod=Date.now();sv(nn);}});});}
 else if(t.id==="bg-dark"){S.bg.dark=+t.value;$("#bg-dark-v").textContent=t.value+"%";applyBg();}
 else if(t.id==="bg-o"||t.id==="bg-s"){var bt=S.bg.type;if(!BG_LIMITS[bt])return;S.bg[bt][t.id==="bg-o"?"o":"s"]=+t.value;$("#"+t.id+"-v").textContent=t.value+(t.id==="bg-o"?"%":" px");applyBg();}});
 document.addEventListener("change",function(e){var t=e.target;if(t.id==="bg-o"||t.id==="bg-s"||t.id==="bg-dark")svS();
-else if(t.id==="ea")$("#el").style.display=t.checked?"none":"block";
+else if(t.id==="ea"){$("#el").style.display=t.checked?"none":"block";if(!t.checked)exList($("#es").value);}
+else if(t.classList.contains("ex")){if(t.checked)exSel[t.value]=1;else delete exSel[t.value];}
 else if(t.classList.contains("ef")||t.classList.contains("ei")||t.classList.contains("ed")){var g=t.classList.contains("ef")?".ef":t.classList.contains("ei")?".ei":".ed";[].forEach.call(document.querySelectorAll(g),function(o){o.checked=o===t;});if(g===".ed")$("#vn").style.display=t.value==="ver"?"block":"none";}
 else if(t.id==="t1"&&!t.checked)$("#t2").checked=false;else if(t.id==="t2"&&t.checked)$("#t1").checked=true;});
 
@@ -583,14 +635,16 @@ if(pr[0]==="n"&&pr[2]==="i"&&!(nr[0]==="n"&&nr[2]==="i"&&nr[3]===pr[3])){var pn=
 if(nr[0]==="n"&&(pr[0]!=="n"||pr[1]!==nr[1]))freshId=nr[1];scr[curR]=snap();searching=false;q="";$("#dlg").classList.remove("on");$("#menu").classList.remove("on");render();saveView();});
 function saveView(){try{var s=snap();localStorage.setItem("ntdb:view",JSON.stringify({r:curR,s:s.st,n:s.n,t:Date.now()}));}catch(e){}}
 window.ntdbBack=function(){var d=$("#dlg"),m=$("#menu");if(d.classList.contains("on")){d.classList.remove("on");return true;}if(m.classList.contains("on")){m.classList.remove("on");return true;}if(searching){searching=false;q="";render();return true;}
-var h=location.hash.slice(1)||"home";if(h==="home")return false;if(history.length>1)history.back();else location.replace("#home");return true;};
+var h=location.hash.slice(1)||"home";if(hs.on&&h==="home"){hs={on:false,q:"",mc:"",rmin:null,rmax:null,cop:"=",c1:null,c2:null};render();return true;}if(h==="home")return false;if(history.length>1)history.back();else location.replace("#home");return true;};
 document.addEventListener("focusin",function(e){var t=e.target;if((t.tagName==="INPUT"&&t.type!=="checkbox"&&t.type!=="range"&&t.type!=="file")||t.tagName==="TEXTAREA"){document.body.classList.add("kb");if(t.tagName==="INPUT"){t.setAttribute("enterkeyhint",t.id==="it"||t.id==="nt"?"next":"done");t.setAttribute("autocomplete","off");}setTimeout(function(){if(document.activeElement===t&&t.scrollIntoView)t.scrollIntoView({block:"center"});},320);}});
 document.addEventListener("focusout",function(){setTimeout(function(){var a=document.activeElement;if(!a||(a.tagName!=="INPUT"&&a.tagName!=="TEXTAREA"))document.body.classList.remove("kb");},120);});
 document.addEventListener("keydown",function(e){var t=e.target;if(e.key==="Escape"){window.ntdbBack();return;}
 if(e.key==="Enter"&&t.tagName==="INPUT"&&t.type!=="checkbox"&&t.type!=="range"){e.preventDefault();if(t.id==="tgn")$("[data-a=tgadd]").click();else if(t.id==="it"){var si=$("#is");if(si)si.focus();}else if(t.id==="nt"){$("#no").focus();}else if(t.id==="q"||t.id==="es"){t.blur();}else{var bb=document.querySelector("#dlg.on .bt .b1,#full.on .bt .b1");if(bb)bb.click();else t.blur();}}});
 document.addEventListener("visibilitychange",function(){if(document.hidden){flush();saveView();}else autoCheck();});
 window.addEventListener("pagehide",function(){flush();saveView();});document.addEventListener("freeze",function(){flush();saveView();});
-try{var lv=JSON.parse(localStorage.getItem("ntdb:view"));if(lv&&lv.r&&Date.now()-lv.t<1800000){scr[lv.r]={st:lv.s||0,n:lv.n||0};if(!location.hash&&lv.r!=="home")location.hash="#"+lv.r;}}catch(e){}
+(function(){var st=S.start;if(!location.hash&&st.t!=="last"){if(st.t==="history")location.hash="#history";else if(st.t==="settings")location.hash="#settings";else if(st.t==="novel"&&st.id)location.hash="#n/"+st.id;return;}
+try{var lv=JSON.parse(localStorage.getItem("ntdb:view"));if(lv&&lv.r&&Date.now()-lv.t<1800000){scr[lv.r]={st:lv.s||0,n:lv.n||0};if(!location.hash&&lv.r!=="home")location.hash="#"+lv.r;}}catch(e){}})();
+$("#t-home").innerHTML=ic("home")+"Home";$("#t-history").innerHTML=ic("hist")+"History";$("#t-search").innerHTML=ic("search")+"Search";$("#t-settings").innerHTML=ic("set")+"Settings";$("#add").innerHTML=ic("plus");
 if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 S.bg=cleanBg(S.bg);$("#pf").addEventListener("change",function(){var f=this.files[0];this.value="";if(f)loadPhoto(f);});
 pick($("#cf"),420,function(d){var nv=find(mid);if(nv&&d)setCover(nv,d);});
