@@ -7,7 +7,7 @@
 **A personal space to organize the novels you read and keep track of every detail.**
 
 
-![Version](https://img.shields.io/badge/version-1.1.4-cf9f86?style=for-the-badge)
+![Version](https://img.shields.io/badge/version-1.1.8-cf9f86?style=for-the-badge)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -93,19 +93,18 @@ Android may ask you to allow installation from your browser or file manager. Onl
 
 | Version | Notes |
 | --- | --- |
-| **1.1.4** | Database moved to on-device storage for large libraries, faster back navigation, lazy loading and skeleton placeholders, color wheel for categories, tap-outside to close versions. |
-| **1.0.9** | Home keeps its scroll place, version badge and list, shared version names, white item text, duplicate and delete items, Android polish. |
-| **1.0.7** | Tags, homepage sort and view switch, version selector, zip import with versions, export fixes, About the developer, and a new Design style page. |
-| **1.0.5** | Category colors, templates, novel information, Clear cover, and export to zip. |
-| **1.0.4** | Import from other apps, set cover, edit and delete novels, and separated item cards. |
-| **1.0.3** | Scrollable category tabs, full-page items, and the novel dropdown menu. |
-| **1.0.2** | Novels, categories, and items. Theme and Design style screens. Smaller navigation bar. |
-| **1.0.0** | First release with navigation, empty home, and basic settings. |
+| **1.1.8** | Permanent novel and version IDs with safe migration, version add and delete, reliable related-works matching for every category name and version, saved related-work links, IDs preserved in backups. |
+| **1.1.6** | Android folder picker and backup options for automatic backups, version badge read from the version name, startup page setting, steadier import countdown. |
+| **1.1.4** | History and Favorites, Search with Advanced search, automatic backups, novels open on their first category. |
+| **1.1.0** | On-device database for large libraries, lazy loading, skeleton placeholders, color wheel. |
+| **1.0.9** | Scroll position restored, version list, duplicate and delete items, Android polish. |
+| **1.0.7** | Tags, sort and view switch, version selector, zip import, new Design style page. |
+| **1.0.0** | First release. |
 
 ---
 
 <div align="center">
 
-Novel Tracker DB · Version 1.1.6 · Made by Abu Bokker (axon469)
+Novel Tracker DB · Version 1.1.8 · Made by Abu Bokker (axon469)
 
 </div>
